@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:temp_project/core/di/injection.dart';
 import 'core/network/models/api_result.dart';
 import 'features/auth/data/models/auth_response.dart';
-import 'features/auth/domain/repositories/auth_repository.dart';
+import 'features/auth/domain/usecases/login_usecase.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -36,7 +36,7 @@ class NetworkTestScreen extends StatefulWidget {
 }
 
 class _NetworkTestScreenState extends State<NetworkTestScreen> {
-  late final AuthRepository _authRepository;
+  late final LoginUseCase _loginUseCase;
 
   bool _isLoading = false;
   String _resultMessage = 'Press button or launch to test API';
@@ -45,19 +45,21 @@ class _NetworkTestScreenState extends State<NetworkTestScreen> {
   @override
   void initState() {
     super.initState();
-    _authRepository = sl<AuthRepository>();
+    _loginUseCase = sl<LoginUseCase>();
     _testApiCall();
   }
 
   Future<void> _testApiCall() async {
     setState(() {
       _isLoading = true;
-      _resultMessage = 'Dispatching request to auth/login...';
+      _resultMessage = 'Dispatching request via LoginUseCase...';
     });
 
-    final result = await _authRepository.login(
-      phone: '011432904484',
-      countryCode: '+20',
+    final result = await _loginUseCase(
+      const LoginParams(
+        phone: '011432904484',
+        countryCode: '+20',
+      ),
     );
 
     switch (result) {

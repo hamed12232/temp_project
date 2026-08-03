@@ -14,16 +14,18 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart' as _i558;
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:http/http.dart' as _i519;
 import 'package:injectable/injectable.dart' as _i526;
-import 'package:temp_project/core/di/network_module.dart' as _i437;
+import 'package:temp_project/core/di/network_module.dart' as _i689;
 import 'package:temp_project/core/network/dio/dio_factory.dart' as _i241;
 import 'package:temp_project/core/network/http/http_service.dart' as _i86;
-import 'package:temp_project/core/storage/token_storage.dart' as _i657;
+import 'package:temp_project/core/storage/token_storage.dart' as _i472;
 import 'package:temp_project/features/auth/data/datasource/remote/auth_api_service.dart'
     as _i552;
 import 'package:temp_project/features/auth/data/repositories/auth_repository_impl.dart'
     as _i320;
 import 'package:temp_project/features/auth/domain/repositories/auth_repository.dart'
     as _i859;
+import 'package:temp_project/features/auth/domain/usecases/login_usecase.dart'
+    as _i659;
 
 extension GetItInjectableX on _i174.GetIt {
   // initializes the registration of main-scope dependencies inside of GetIt
@@ -41,11 +43,11 @@ extension GetItInjectableX on _i174.GetIt {
         defaultTimeout: gh<Duration>(),
       ),
     );
-    gh.lazySingleton<_i657.TokenStorage>(
-      () => _i657.TokenStorage(storage: gh<_i558.FlutterSecureStorage>()),
+    gh.lazySingleton<_i472.TokenStorage>(
+      () => _i472.TokenStorage(storage: gh<_i558.FlutterSecureStorage>()),
     );
     gh.lazySingleton<_i241.DioFactory>(
-      () => networkModule.dioFactory(gh<_i657.TokenStorage>()),
+      () => networkModule.dioFactory(gh<_i472.TokenStorage>()),
     );
     gh.lazySingleton<_i361.Dio>(
       () => networkModule.dio(gh<_i241.DioFactory>()),
@@ -56,8 +58,11 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i859.AuthRepository>(
       () => _i320.AuthRepositoryImpl(gh<_i552.AuthApiService>()),
     );
+    gh.lazySingleton<_i659.LoginUseCase>(
+      () => _i659.LoginUseCase(gh<_i859.AuthRepository>()),
+    );
     return this;
   }
 }
 
-class _$NetworkModule extends _i437.NetworkModule {}
+class _$NetworkModule extends _i689.NetworkModule {}
