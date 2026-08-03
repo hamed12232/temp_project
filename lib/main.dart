@@ -6,6 +6,8 @@ import 'package:temp_project/core/di/injection.dart';
 import 'core/network/models/api_result.dart';
 import 'features/auth/domain/usecases/login_usecase.dart';
 
+import 'features/auth/presentation/pages/otp_screen.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await configureDependencies();
@@ -18,13 +20,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Network Test App',
+      title: 'OTP Test App',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const NetworkTestScreen(),
+      home: const OtpScreen(),
     );
   }
 }
