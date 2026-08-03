@@ -26,6 +26,8 @@ import 'package:temp_project/features/auth/domain/repositories/auth_repository.d
     as _i859;
 import 'package:temp_project/features/auth/domain/usecases/login_usecase.dart'
     as _i659;
+import 'package:temp_project/features/auth/presentation/cubit/login_cubit.dart'
+    as _i579;
 
 extension GetItInjectableX on _i174.GetIt {
   // initializes the registration of main-scope dependencies inside of GetIt
@@ -60,6 +62,9 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.lazySingleton<_i659.LoginUseCase>(
       () => _i659.LoginUseCase(gh<_i859.AuthRepository>()),
+    );
+    gh.factory<_i579.LoginCubit>(
+      () => _i579.LoginCubit(gh<_i659.LoginUseCase>()),
     );
     return this;
   }
