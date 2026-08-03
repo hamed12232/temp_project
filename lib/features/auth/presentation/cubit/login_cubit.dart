@@ -3,7 +3,6 @@ import 'package:injectable/injectable.dart';
 
 import '../../../../core/network/models/api_result.dart';
 import '../../../../core/utils/enums/enums.dart';
-import '../../data/models/auth_response.dart';
 import '../../domain/usecases/login_usecase.dart';
 import 'login_state.dart';
 
@@ -20,14 +19,11 @@ class LoginCubit extends Cubit<LoginState> {
     emit(state.copyWith(status: RequestStatus.loading, errorMessage: null));
 
     final result = await _loginUseCase(
-      LoginParams(
-        phone: phone,
-        countryCode: countryCode,
-      ),
+      LoginParams(phone: phone, countryCode: countryCode),
     );
 
-    switch (result) {
-      case Success<AuthResponse>(data: final authResponse):
+    result.when(
+      success: (authResponse) {
         emit(
           state.copyWith(
             status: RequestStatus.success,
@@ -35,13 +31,15 @@ class LoginCubit extends Cubit<LoginState> {
             message: 'Login successful',
           ),
         );
-      case FailureResult<AuthResponse>(failure: final failure):
+      },
+      failure: (failure) {
         emit(
           state.copyWith(
             status: RequestStatus.failure,
             errorMessage: failure.message,
           ),
         );
-    }
+      },
+    );
   }
 }

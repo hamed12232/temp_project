@@ -1,8 +1,9 @@
 import 'dart:developer' as developer;
+
 import 'package:flutter/material.dart';
 import 'package:temp_project/core/di/injection.dart';
+
 import 'core/network/models/api_result.dart';
-import 'features/auth/data/models/auth_response.dart';
 import 'features/auth/domain/usecases/login_usecase.dart';
 
 void main() async {
@@ -56,21 +57,19 @@ class _NetworkTestScreenState extends State<NetworkTestScreen> {
     });
 
     final result = await _loginUseCase(
-      const LoginParams(
-        phone: '011432904484',
-        countryCode: '+20',
-      ),
+      const LoginParams(phone: '011432904484', countryCode: '+20'),
     );
 
-    switch (result) {
-      case Success<AuthResponse>(data: final authResponse):
+    result.when(
+      success: (authResponse) {
         developer.log('✅ API Success: ${authResponse.accessToken}');
         setState(() {
           _isLoading = false;
           _isSuccess = true;
           _resultMessage = 'Success Token: ${authResponse.accessToken}';
         });
-      case FailureResult<AuthResponse>(failure: final failure):
+      },
+      failure: (failure) {
         developer.log('❌ API Failure: ${failure.message}');
         setState(() {
           _isLoading = false;
@@ -78,7 +77,8 @@ class _NetworkTestScreenState extends State<NetworkTestScreen> {
           _resultMessage =
               'Error Code: ${failure.statusCode ?? 'N/A'}\nMessage: ${failure.message}';
         });
-    }
+      },
+    );
   }
 
   @override

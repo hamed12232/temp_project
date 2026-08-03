@@ -1,18 +1,11 @@
+import 'package:freezed_annotation/freezed_annotation.dart';
+
 import '../error/failure.dart';
 
-sealed class ApiResult<T> {
-  const ApiResult();
+part 'api_result.freezed.dart';
 
-  factory ApiResult.success(T data) => Success<T>(data);
-  factory ApiResult.failure(Failure failure) => FailureResult<T>(failure);
-}
-
-final class Success<T> extends ApiResult<T> {
-  final T data;
-  const Success(this.data);
-}
-
-final class FailureResult<T> extends ApiResult<T> {
-  final Failure failure;
-  const FailureResult(this.failure);
+@freezed
+abstract class ApiResult<T> with _$ApiResult<T> {
+  const factory ApiResult.success(T data) = Success<T>;
+  const factory ApiResult.failure(Failure failure) = FailureResult<T>;
 }
