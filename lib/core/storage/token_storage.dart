@@ -1,6 +1,6 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:injectable/injectable.dart';
-import '../constants/api_constants.dart';
+import '../network/constants/api_constants.dart';
 
 @LazySingleton()
 class TokenStorage {

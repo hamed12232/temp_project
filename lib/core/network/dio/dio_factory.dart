@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 import '../constants/api_constants.dart';
 import '../interceptors/auth_interceptor.dart';
 import '../interceptors/logger_interceptor.dart';
-import '../storage/token_storage.dart';
+import '../../storage/token_storage.dart';
 
 class DioFactory {
   final TokenStorage _tokenStorage;

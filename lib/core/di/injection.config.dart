@@ -14,10 +14,10 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart' as _i558;
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:http/http.dart' as _i519;
 import 'package:injectable/injectable.dart' as _i526;
-import 'package:temp_project/core/network/di/network_module.dart' as _i437;
+import 'package:temp_project/core/di/network_module.dart' as _i437;
 import 'package:temp_project/core/network/dio/dio_factory.dart' as _i241;
 import 'package:temp_project/core/network/http/http_service.dart' as _i86;
-import 'package:temp_project/core/network/storage/token_storage.dart' as _i657;
+import 'package:temp_project/core/storage/token_storage.dart' as _i657;
 import 'package:temp_project/features/auth/data/datasource/remote/auth_api_service.dart'
     as _i552;
 import 'package:temp_project/features/auth/data/repositories/auth_repository_impl.dart'

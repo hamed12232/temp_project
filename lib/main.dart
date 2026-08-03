@@ -1,6 +1,6 @@
 import 'dart:developer' as developer;
 import 'package:flutter/material.dart';
-import 'package:temp_project/core/network/di/injection.dart';
+import 'package:temp_project/core/di/injection.dart';
 import 'core/network/models/api_result.dart';
 import 'features/auth/data/models/auth_response.dart';
 import 'features/auth/domain/repositories/auth_repository.dart';
