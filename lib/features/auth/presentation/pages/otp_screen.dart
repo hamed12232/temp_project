@@ -23,10 +23,7 @@ class OtpView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('OTP Counter Test'),
-        centerTitle: true,
-      ),
+      appBar: AppBar(title: const Text('OTP Counter Test'), centerTitle: true),
       body: Padding(
         padding: const EdgeInsets.all(24.0),
         child: Center(
@@ -41,13 +38,15 @@ class OtpView extends StatelessWidget {
               const SizedBox(height: 16),
               const Text(
                 'Enter Verification Code',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 24),
               BlocBuilder<OtpCubit, OtpState>(
+                buildWhen: (previous, current) {
+                  return previous.remainingSeconds !=
+                          current.remainingSeconds ||
+                      previous.canResend != current.canResend;
+                },
                 builder: (context, state) {
                   return Column(
                     children: [
