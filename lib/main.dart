@@ -1,12 +1,12 @@
 import 'dart:developer' as developer;
 
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:temp_project/core/di/injection.dart';
+import 'package:temp_project/features/upload/presentation/pages/upload_page.dart';
 
 import 'core/network/models/api_result.dart';
 import 'features/auth/domain/usecases/login_usecase.dart';
-
-import 'features/auth/presentation/pages/otp_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,14 +19,18 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'OTP Test App',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
+    return ScreenUtilInit(
+      designSize: const Size(375, 812),
+      minTextAdapt: true,
+      child: MaterialApp(
+        title: 'OTP Test App',
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+          useMaterial3: true,
+        ),
+        home: const UploadPage(),
       ),
-      home: const OtpScreen(),
     );
   }
 }

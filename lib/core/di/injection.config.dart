@@ -17,6 +17,8 @@ import 'package:injectable/injectable.dart' as _i526;
 import 'package:temp_project/core/di/network_module.dart' as _i689;
 import 'package:temp_project/core/network/dio/dio_factory.dart' as _i241;
 import 'package:temp_project/core/network/http/http_service.dart' as _i86;
+import 'package:temp_project/core/services/image_picker/image_picker_service.dart'
+    as _i717;
 import 'package:temp_project/core/storage/token_storage.dart' as _i472;
 import 'package:temp_project/features/auth/data/datasource/remote/auth_api_service.dart'
     as _i552;
@@ -30,6 +32,16 @@ import 'package:temp_project/features/auth/presentation/cubit/login_cubit.dart'
     as _i579;
 import 'package:temp_project/features/auth/presentation/cubit/otp_cubit.dart'
     as _i706;
+import 'package:temp_project/features/upload/data/datasource/upload_remote_datasource.dart'
+    as _i342;
+import 'package:temp_project/features/upload/data/repository/upload_repository_impl.dart'
+    as _i27;
+import 'package:temp_project/features/upload/domain/repository/upload_repository.dart'
+    as _i328;
+import 'package:temp_project/features/upload/domain/usecases/upload_images_usecase.dart'
+    as _i174;
+import 'package:temp_project/features/upload/presentation/cubit/upload_cubit.dart'
+    as _i659;
 
 extension GetItInjectableX on _i174.GetIt {
   // initializes the registration of main-scope dependencies inside of GetIt
@@ -42,6 +54,9 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i706.OtpCubit>(() => _i706.OtpCubit());
     gh.lazySingleton<_i519.Client>(() => networkModule.client);
     gh.lazySingleton<_i558.FlutterSecureStorage>(() => networkModule.storage);
+    gh.lazySingleton<_i717.ImagePickerService>(
+      () => _i717.ImagePickerService(),
+    );
     gh.lazySingleton<_i86.HttpService>(
       () => _i86.HttpService(
         client: gh<_i519.Client>(),
@@ -60,11 +75,29 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i552.AuthApiService>(
       () => networkModule.authApiService(gh<_i361.Dio>()),
     );
+    gh.lazySingleton<_i342.UploadApiService>(
+      () => networkModule.uploadApiService(gh<_i361.Dio>()),
+    );
+    gh.lazySingleton<_i342.UploadRemoteDataSource>(
+      () => _i342.UploadRemoteDataSource(gh<_i342.UploadApiService>()),
+    );
+    gh.lazySingleton<_i328.UploadRepository>(
+      () => _i27.UploadRepositoryImpl(gh<_i342.UploadRemoteDataSource>()),
+    );
     gh.lazySingleton<_i859.AuthRepository>(
       () => _i320.AuthRepositoryImpl(gh<_i552.AuthApiService>()),
     );
     gh.lazySingleton<_i659.LoginUseCase>(
       () => _i659.LoginUseCase(gh<_i859.AuthRepository>()),
+    );
+    gh.lazySingleton<_i174.UploadImagesUseCase>(
+      () => _i174.UploadImagesUseCase(gh<_i328.UploadRepository>()),
+    );
+    gh.factory<_i659.UploadCubit>(
+      () => _i659.UploadCubit(
+        gh<_i717.ImagePickerService>(),
+        gh<_i174.UploadImagesUseCase>(),
+      ),
     );
     gh.factory<_i579.LoginCubit>(
       () => _i579.LoginCubit(gh<_i659.LoginUseCase>()),

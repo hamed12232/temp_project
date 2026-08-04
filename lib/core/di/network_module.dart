@@ -5,6 +5,7 @@ import 'package:injectable/injectable.dart';
 import 'package:temp_project/core/network/dio/dio_factory.dart';
 import 'package:temp_project/core/storage/token_storage.dart';
 import 'package:temp_project/features/auth/data/datasource/remote/auth_api_service.dart';
+import 'package:temp_project/features/upload/data/datasource/upload_remote_datasource.dart';
 
 @module
 abstract class NetworkModule {
@@ -19,4 +20,6 @@ abstract class NetworkModule {
   FlutterSecureStorage get storage => const FlutterSecureStorage();
   @lazySingleton
   AuthApiService authApiService(Dio dio) => AuthApiService(dio);
+  @lazySingleton
+  UploadApiService uploadApiService(Dio dio) => UploadApiService(dio);
 }
