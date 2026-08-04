@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:injectable/injectable.dart';
 
@@ -6,33 +7,36 @@ import '../../../../core/usecase/base_usecase.dart';
 import '../../data/models/uploaded_file_model.dart';
 import '../repository/upload_repository.dart';
 
-class UploadImagesParams {
-  final List<XFile> files;
+class UploadSingleImageParams {
+  final XFile file;
   final String folderPath;
   final UploadProgressCallback? onSendProgress;
+  final CancelToken? cancelToken;
 
-  const UploadImagesParams({
-    required this.files,
+  const UploadSingleImageParams({
+    required this.file,
     this.folderPath = 'users',
     this.onSendProgress,
+    this.cancelToken,
   });
 }
 
 @lazySingleton
-class UploadImagesUseCase
-    extends BaseUseCase<List<UploadedFileModel>, UploadImagesParams> {
+class UploadSingleImageUseCase
+    extends BaseUseCase<UploadedFileModel, UploadSingleImageParams> {
   final UploadRepository _repository;
 
-  UploadImagesUseCase(this._repository);
+  UploadSingleImageUseCase(this._repository);
 
   @override
-  Future<ApiResult<List<UploadedFileModel>>> call(
-    UploadImagesParams parameters,
+  Future<ApiResult<UploadedFileModel>> call(
+    UploadSingleImageParams parameters,
   ) async {
-    return _repository.uploadImages(
-      parameters.files,
+    return _repository.uploadSingleImage(
+      parameters.file,
       folderPath: parameters.folderPath,
       onSendProgress: parameters.onSendProgress,
+      cancelToken: parameters.cancelToken,
     );
   }
 }

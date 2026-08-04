@@ -10,3 +10,11 @@ enum UploadStatus {
   uploadSuccess,
   uploadFailure,
 }
+
+enum UploadItemStatus {
+  initial,
+  waiting,
+  uploading,
+  success,
+  failure,
+}

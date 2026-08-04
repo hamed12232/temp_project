@@ -38,8 +38,8 @@ import 'package:temp_project/features/upload/data/repository/upload_repository_i
     as _i27;
 import 'package:temp_project/features/upload/domain/repository/upload_repository.dart'
     as _i328;
-import 'package:temp_project/features/upload/domain/usecases/upload_images_usecase.dart'
-    as _i174;
+import 'package:temp_project/features/upload/domain/usecases/upload_single_image_usecase.dart'
+    as _i23;
 import 'package:temp_project/features/upload/presentation/cubit/upload_cubit.dart'
     as _i659;
 
@@ -90,13 +90,13 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i659.LoginUseCase>(
       () => _i659.LoginUseCase(gh<_i859.AuthRepository>()),
     );
-    gh.lazySingleton<_i174.UploadImagesUseCase>(
-      () => _i174.UploadImagesUseCase(gh<_i328.UploadRepository>()),
+    gh.lazySingleton<_i23.UploadSingleImageUseCase>(
+      () => _i23.UploadSingleImageUseCase(gh<_i328.UploadRepository>()),
     );
     gh.factory<_i659.UploadCubit>(
       () => _i659.UploadCubit(
         gh<_i717.ImagePickerService>(),
-        gh<_i174.UploadImagesUseCase>(),
+        gh<_i23.UploadSingleImageUseCase>(),
       ),
     );
     gh.factory<_i579.LoginCubit>(

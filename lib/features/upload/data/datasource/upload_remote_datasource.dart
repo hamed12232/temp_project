@@ -19,34 +19,32 @@ abstract class UploadApiService {
     @Part(name: "path") String path,
     @Part(name: "image[]") List<MultipartFile> images, {
     @SendProgress() ProgressCallback? onSendProgress,
+    @CancelRequest() CancelToken? cancelToken,
   });
 }
 
-/// Only place in the app where XFile → MultipartFile conversion happens.
 @lazySingleton
 class UploadRemoteDataSource {
   final UploadApiService _apiService;
 
   UploadRemoteDataSource(this._apiService);
 
-  Future<HttpResponse<RemoteResponse<UploadFileResponse>>> uploadImages(
-    List<XFile> files, {
+  Future<HttpResponse<RemoteResponse<UploadFileResponse>>> uploadSingleImage(
+    XFile file, {
     String folderPath = 'users',
     ProgressCallback? onSendProgress,
+    CancelToken? cancelToken,
   }) async {
-    final multipartFiles = await Future.wait(
-      files.map(
-        (file) => MultipartFile.fromFile(
-          file.path,
-          filename: file.name,
-        ),
-      ),
+    final multipartFile = await MultipartFile.fromFile(
+      file.path,
+      filename: file.name,
     );
 
     return _apiService.uploadImages(
       folderPath,
-      multipartFiles,
+      [multipartFile],
       onSendProgress: onSendProgress,
+      cancelToken: cancelToken,
     );
   }
 }

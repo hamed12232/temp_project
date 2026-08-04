@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:injectable/injectable.dart';
 
@@ -14,18 +15,20 @@ class UploadRepositoryImpl extends BaseRepository implements UploadRepository {
   UploadRepositoryImpl(this._remoteDataSource);
 
   @override
-  Future<ApiResult<List<UploadedFileModel>>> uploadImages(
-    List<XFile> images, {
+  Future<ApiResult<UploadedFileModel>> uploadSingleImage(
+    XFile image, {
     String folderPath = 'users',
     UploadProgressCallback? onSendProgress,
+    CancelToken? cancelToken,
   }) async {
     return safeApiCall(() async {
-      final response = await _remoteDataSource.uploadImages(
-        images,
+      final response = await _remoteDataSource.uploadSingleImage(
+        image,
         folderPath: folderPath,
         onSendProgress: onSendProgress,
+        cancelToken: cancelToken,
       );
-      return response.data.data.files;
+      return response.data.data.files.first;
     });
   }
 }

@@ -24,6 +24,7 @@ class _UploadApiService implements UploadApiService {
     String path,
     List<MultipartFile> images, {
     void Function(int, int)? onSendProgress,
+    CancelToken? cancelToken,
   }) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
@@ -45,6 +46,7 @@ class _UploadApiService implements UploadApiService {
                 '/upload',
                 queryParameters: queryParameters,
                 data: _data,
+                cancelToken: cancelToken,
                 onSendProgress: onSendProgress,
               )
               .copyWith(

@@ -1,19 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:temp_project/core/utils/enums/enums.dart';
 
 import '../../../../core/di/injection.dart';
 import '../../../../core/services/image_picker/image_picker_bottom_sheet.dart';
+import '../../../../core/utils/enums/enums.dart';
 import '../cubit/upload_cubit.dart';
 import '../cubit/upload_state.dart';
 import '../widgets/add_images_header.dart';
-import '../widgets/image_grid.dart';
-import '../widgets/upload_button.dart';
 import '../widgets/upload_empty_state.dart';
-import '../widgets/upload_failure_widget.dart';
-import '../widgets/upload_loading_overlay.dart';
-import '../widgets/uploaded_images_grid.dart';
+import '../widgets/upload_grid.dart';
 
 class UploadPage extends StatelessWidget {
   const UploadPage({super.key});
@@ -38,15 +34,13 @@ class _UploadView extends StatelessWidget {
         centerTitle: true,
         actions: [
           BlocBuilder<UploadCubit, UploadState>(
-            buildWhen: (prev, curr) =>
-                prev.selectedImages.length != curr.selectedImages.length ||
-                prev.uploadedFiles.length != curr.uploadedFiles.length,
+            buildWhen: (prev, curr) => prev.items.length != curr.items.length,
             builder: (context, state) {
-              if (state.selectedImages.isEmpty && state.uploadedFiles.isEmpty) {
+              if (state.items.isEmpty) {
                 return const SizedBox.shrink();
               }
               return IconButton(
-                onPressed: () => context.read<UploadCubit>().clearImages(),
+                onPressed: () => context.read<UploadCubit>().clearAll(),
                 icon: const Icon(Icons.delete_outline),
                 tooltip: 'Clear all',
               );
@@ -54,109 +48,61 @@ class _UploadView extends StatelessWidget {
           ),
         ],
       ),
-      body: BlocConsumer<UploadCubit, UploadState>(
-        listener: _handleStateChanges,
+      body: BlocBuilder<UploadCubit, UploadState>(
         builder: (context, state) {
-          return Stack(
-            children: [
-              SafeArea(
-                child: Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 16.w,
-                    vertical: 12.h,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      AddImagesHeader(
-                        imageCount: state.selectedImages.length,
-                        onAddSingle: () => _showImagePicker(context),
-                        onPickMultiple: () =>
-                            context.read<UploadCubit>().pickImages(),
-                      ),
-                      SizedBox(height: 16.h),
-                      Expanded(
-                        child:
-                            state.selectedImages.isEmpty &&
-                                state.uploadedFiles.isEmpty
-                            ? UploadEmptyState(
-                                onTap: () => _showImagePicker(context),
-                              )
-                            : SingleChildScrollView(
-                                child: Column(
-                                  children: [
-                                    if (state.selectedImages.isNotEmpty)
-                                      ImageGrid(
-                                        images: state.selectedImages,
-                                        onRemove: (index) => context
-                                            .read<UploadCubit>()
-                                            .removeImage(index),
-                                      ),
-                                    if (state.selectedImages.isNotEmpty &&
-                                        state.uploadedFiles.isNotEmpty)
-                                      SizedBox(height: 16.h),
-                                    if (state.uploadedFiles.isNotEmpty)
-                                      UploadedImagesGrid(
-                                        files: state.uploadedFiles,
-                                      ),
-                                  ],
-                                ),
-                              ),
-                      ),
-                      if (state.status == UploadStatus.uploadFailure &&
-                          state.failure != null)
-                        UploadFailureWidget(
-                          message: state.failure!.message,
-                          onRetry: () => context.read<UploadCubit>().retry(),
-                        ),
-                      SizedBox(height: 12.h),
-                      UploadButton(
-                        isEnabled: state.selectedImages.isNotEmpty,
-                        isLoading: state.isUploading,
-                        onPressed: () =>
-                            context.read<UploadCubit>().uploadImages(),
-                      ),
-                      SizedBox(height: 8.h),
-                    ],
-                  ),
-                ),
+          final totalCount = state.items.length;
+          final successCount = state.items
+              .where((item) => item.status == UploadItemStatus.success)
+              .length;
+
+          return SafeArea(
+            child: Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: 16.w,
+                vertical: 12.h,
               ),
-              if (state.isUploading)
-                UploadLoadingOverlay(uploadProgress: state.uploadProgress),
-            ],
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  AddImagesHeader(
+                    imageCount: totalCount,
+                    onAddSingle: () => _showImagePicker(context),
+                    onPickMultiple: () =>
+                        context.read<UploadCubit>().pickImages(),
+                  ),
+                  if (totalCount > 0) ...[
+                    SizedBox(height: 6.h),
+                    Text(
+                      '$successCount of $totalCount uploaded',
+                      style: TextStyle(
+                        fontSize: 12.sp,
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      ),
+                    ),
+                  ],
+                  SizedBox(height: 16.h),
+                  Expanded(
+                    child: state.items.isEmpty
+                        ? UploadEmptyState(
+                            onTap: () => _showImagePicker(context),
+                          )
+                        : SingleChildScrollView(
+                            child: UploadGrid(
+                              items: state.items,
+                              onRemove: (id) =>
+                                  context.read<UploadCubit>().removeItem(id),
+                              onRetry: (id) =>
+                                  context.read<UploadCubit>().retryItem(id),
+                            ),
+                          ),
+                  ),
+                ],
+              ),
+            ),
           );
         },
       ),
     );
-  }
-
-  void _handleStateChanges(BuildContext context, UploadState state) {
-    if (state.status == UploadStatus.uploadSuccess) {
-      ScaffoldMessenger.of(context)
-        ..hideCurrentSnackBar()
-        ..showSnackBar(
-          SnackBar(
-            content: Row(
-              children: [
-                const Icon(Icons.check_circle, color: Colors.white),
-                SizedBox(width: 8.w),
-                Expanded(
-                  child: Text(
-                    '${state.uploadedFiles.length} image${state.uploadedFiles.length > 1 ? 's' : ''} uploaded successfully!',
-                  ),
-                ),
-              ],
-            ),
-            backgroundColor: Colors.green.shade700,
-            behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12.r),
-            ),
-            margin: EdgeInsets.all(16.r),
-            duration: const Duration(seconds: 3),
-          ),
-        );
-    }
   }
 
   Future<void> _showImagePicker(BuildContext context) async {
