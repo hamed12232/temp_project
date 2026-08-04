@@ -14,7 +14,7 @@ class UploadCubit extends Cubit<UploadState> {
   final UploadImagesUseCase _uploadImagesUseCase;
 
   UploadCubit(this._imagePickerService, this._uploadImagesUseCase)
-      : super(const UploadState());
+    : super(const UploadState());
 
   Future<void> pickImages() async {
     emit(state.copyWith(status: UploadStatus.pickingImages));
@@ -92,11 +92,24 @@ class UploadCubit extends Cubit<UploadState> {
       state.copyWith(
         status: UploadStatus.uploading,
         isUploading: true,
+        uploadProgress: 0.0,
         failure: null,
       ),
     );
 
-    final result = await _uploadImagesUseCase(state.selectedImages);
+    final params = UploadImagesParams(
+      files: state.selectedImages,
+      onSendProgress: (sent, total) {
+        if (total > 0) {
+          final progress = sent / total;
+          emit(state.copyWith(uploadProgress: progress.clamp(0.0, 1.0)));
+        } else {
+          emit(state.copyWith(uploadProgress: -1.0));
+        }
+      },
+    );
+
+    final result = await _uploadImagesUseCase(params);
 
     result.when(
       success: (uploadedFiles) {
@@ -104,6 +117,7 @@ class UploadCubit extends Cubit<UploadState> {
           state.copyWith(
             status: UploadStatus.uploadSuccess,
             isUploading: false,
+            uploadProgress: 1.0,
             uploadedFiles: uploadedFiles,
             selectedImages: [],
           ),
@@ -114,6 +128,7 @@ class UploadCubit extends Cubit<UploadState> {
           state.copyWith(
             status: UploadStatus.uploadFailure,
             isUploading: false,
+            uploadProgress: 0.0,
             failure: failure,
           ),
         );

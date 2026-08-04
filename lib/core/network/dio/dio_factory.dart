@@ -13,11 +13,13 @@ class DioFactory {
 
   Dio getDio() {
     final dio = Dio(
+      
       BaseOptions(
         baseUrl: ApiConstants.baseUrl,
         connectTimeout: ApiConstants.connectTimeout,
         receiveTimeout: ApiConstants.receiveTimeout,
         sendTimeout: kIsWeb ? null : ApiConstants.sendTimeout,
+        
 
         headers: {
           ApiConstants.contentType: ApiConstants.applicationJson,

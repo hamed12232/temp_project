@@ -17,11 +17,13 @@ class UploadRepositoryImpl extends BaseRepository implements UploadRepository {
   Future<ApiResult<List<UploadedFileModel>>> uploadImages(
     List<XFile> images, {
     String folderPath = 'users',
+    UploadProgressCallback? onSendProgress,
   }) async {
     return safeApiCall(() async {
       final response = await _remoteDataSource.uploadImages(
         images,
         folderPath: folderPath,
+        onSendProgress: onSendProgress,
       );
       return response.data.data.files;
     });

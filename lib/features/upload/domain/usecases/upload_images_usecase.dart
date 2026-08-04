@@ -6,17 +6,33 @@ import '../../../../core/usecase/base_usecase.dart';
 import '../../data/models/uploaded_file_model.dart';
 import '../repository/upload_repository.dart';
 
+class UploadImagesParams {
+  final List<XFile> files;
+  final String folderPath;
+  final UploadProgressCallback? onSendProgress;
+
+  const UploadImagesParams({
+    required this.files,
+    this.folderPath = 'users',
+    this.onSendProgress,
+  });
+}
+
 @lazySingleton
 class UploadImagesUseCase
-    extends BaseUseCase<List<UploadedFileModel>, List<XFile>> {
+    extends BaseUseCase<List<UploadedFileModel>, UploadImagesParams> {
   final UploadRepository _repository;
 
   UploadImagesUseCase(this._repository);
 
   @override
   Future<ApiResult<List<UploadedFileModel>>> call(
-    List<XFile> parameters,
+    UploadImagesParams parameters,
   ) async {
-    return _repository.uploadImages(parameters);
+    return _repository.uploadImages(
+      parameters.files,
+      folderPath: parameters.folderPath,
+      onSendProgress: parameters.onSendProgress,
+    );
   }
 }

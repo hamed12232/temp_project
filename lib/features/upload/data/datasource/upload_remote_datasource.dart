@@ -17,8 +17,9 @@ abstract class UploadApiService {
   @POST(ApiEndpoints.uploadFile)
   Future<HttpResponse<RemoteResponse<UploadFileResponse>>> uploadImages(
     @Part(name: "path") String path,
-    @Part(name: "image[]") List<MultipartFile> images,
-  );
+    @Part(name: "image[]") List<MultipartFile> images, {
+    @SendProgress() ProgressCallback? onSendProgress,
+  });
 }
 
 /// Only place in the app where XFile → MultipartFile conversion happens.
@@ -31,6 +32,7 @@ class UploadRemoteDataSource {
   Future<HttpResponse<RemoteResponse<UploadFileResponse>>> uploadImages(
     List<XFile> files, {
     String folderPath = 'users',
+    ProgressCallback? onSendProgress,
   }) async {
     final multipartFiles = await Future.wait(
       files.map(
@@ -41,6 +43,10 @@ class UploadRemoteDataSource {
       ),
     );
 
-    return _apiService.uploadImages(folderPath, multipartFiles);
+    return _apiService.uploadImages(
+      folderPath,
+      multipartFiles,
+      onSendProgress: onSendProgress,
+    );
   }
 }

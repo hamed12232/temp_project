@@ -22,10 +22,12 @@ class _UploadApiService implements UploadApiService {
   @override
   Future<HttpResponse<RemoteResponse<UploadFileResponse>>> uploadImages(
     String path,
-    List<MultipartFile> images,
-  ) async {
+    List<MultipartFile> images, {
+    void Function(int, int)? onSendProgress,
+  }) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
+    queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     final _data = FormData();
     _data.fields.add(MapEntry('path', path));
@@ -43,6 +45,7 @@ class _UploadApiService implements UploadApiService {
                 '/upload',
                 queryParameters: queryParameters,
                 data: _data,
+                onSendProgress: onSendProgress,
               )
               .copyWith(
                 baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl),

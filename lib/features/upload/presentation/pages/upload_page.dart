@@ -76,7 +76,8 @@ class _UploadView extends StatelessWidget {
                       ),
                       SizedBox(height: 16.h),
                       Expanded(
-                        child: state.selectedImages.isEmpty &&
+                        child:
+                            state.selectedImages.isEmpty &&
                                 state.uploadedFiles.isEmpty
                             ? UploadEmptyState(
                                 onTap: () => _showImagePicker(context),
@@ -120,7 +121,8 @@ class _UploadView extends StatelessWidget {
                   ),
                 ),
               ),
-              if (state.isUploading) const UploadLoadingOverlay(),
+              if (state.isUploading)
+                UploadLoadingOverlay(uploadProgress: state.uploadProgress),
             ],
           );
         },

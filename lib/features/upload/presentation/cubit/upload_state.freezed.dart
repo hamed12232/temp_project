@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$UploadState {
 
- List<XFile> get selectedImages; List<UploadedFileModel> get uploadedFiles; bool get isUploading; UploadStatus get status; Failure? get failure;
+ List<XFile> get selectedImages; List<UploadedFileModel> get uploadedFiles; bool get isUploading; double get uploadProgress; UploadStatus get status; Failure? get failure;
 /// Create a copy of UploadState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $UploadStateCopyWith<UploadState> get copyWith => _$UploadStateCopyWithImpl<Uplo
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is UploadState&&const DeepCollectionEquality().equals(other.selectedImages, selectedImages)&&const DeepCollectionEquality().equals(other.uploadedFiles, uploadedFiles)&&(identical(other.isUploading, isUploading) || other.isUploading == isUploading)&&(identical(other.status, status) || other.status == status)&&(identical(other.failure, failure) || other.failure == failure));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is UploadState&&const DeepCollectionEquality().equals(other.selectedImages, selectedImages)&&const DeepCollectionEquality().equals(other.uploadedFiles, uploadedFiles)&&(identical(other.isUploading, isUploading) || other.isUploading == isUploading)&&(identical(other.uploadProgress, uploadProgress) || other.uploadProgress == uploadProgress)&&(identical(other.status, status) || other.status == status)&&(identical(other.failure, failure) || other.failure == failure));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(selectedImages),const DeepCollectionEquality().hash(uploadedFiles),isUploading,status,failure);
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(selectedImages),const DeepCollectionEquality().hash(uploadedFiles),isUploading,uploadProgress,status,failure);
 
 @override
 String toString() {
-  return 'UploadState(selectedImages: $selectedImages, uploadedFiles: $uploadedFiles, isUploading: $isUploading, status: $status, failure: $failure)';
+  return 'UploadState(selectedImages: $selectedImages, uploadedFiles: $uploadedFiles, isUploading: $isUploading, uploadProgress: $uploadProgress, status: $status, failure: $failure)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $UploadStateCopyWith<$Res>  {
   factory $UploadStateCopyWith(UploadState value, $Res Function(UploadState) _then) = _$UploadStateCopyWithImpl;
 @useResult
 $Res call({
- List<XFile> selectedImages, List<UploadedFileModel> uploadedFiles, bool isUploading, UploadStatus status, Failure? failure
+ List<XFile> selectedImages, List<UploadedFileModel> uploadedFiles, bool isUploading, double uploadProgress, UploadStatus status, Failure? failure
 });
 
 
@@ -62,12 +62,13 @@ class _$UploadStateCopyWithImpl<$Res>
 
 /// Create a copy of UploadState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? selectedImages = null,Object? uploadedFiles = null,Object? isUploading = null,Object? status = null,Object? failure = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? selectedImages = null,Object? uploadedFiles = null,Object? isUploading = null,Object? uploadProgress = null,Object? status = null,Object? failure = freezed,}) {
   return _then(_self.copyWith(
 selectedImages: null == selectedImages ? _self.selectedImages : selectedImages // ignore: cast_nullable_to_non_nullable
 as List<XFile>,uploadedFiles: null == uploadedFiles ? _self.uploadedFiles : uploadedFiles // ignore: cast_nullable_to_non_nullable
 as List<UploadedFileModel>,isUploading: null == isUploading ? _self.isUploading : isUploading // ignore: cast_nullable_to_non_nullable
-as bool,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
+as bool,uploadProgress: null == uploadProgress ? _self.uploadProgress : uploadProgress // ignore: cast_nullable_to_non_nullable
+as double,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as UploadStatus,failure: freezed == failure ? _self.failure : failure // ignore: cast_nullable_to_non_nullable
 as Failure?,
   ));
@@ -154,10 +155,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( List<XFile> selectedImages,  List<UploadedFileModel> uploadedFiles,  bool isUploading,  UploadStatus status,  Failure? failure)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( List<XFile> selectedImages,  List<UploadedFileModel> uploadedFiles,  bool isUploading,  double uploadProgress,  UploadStatus status,  Failure? failure)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _UploadState() when $default != null:
-return $default(_that.selectedImages,_that.uploadedFiles,_that.isUploading,_that.status,_that.failure);case _:
+return $default(_that.selectedImages,_that.uploadedFiles,_that.isUploading,_that.uploadProgress,_that.status,_that.failure);case _:
   return orElse();
 
 }
@@ -175,10 +176,10 @@ return $default(_that.selectedImages,_that.uploadedFiles,_that.isUploading,_that
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( List<XFile> selectedImages,  List<UploadedFileModel> uploadedFiles,  bool isUploading,  UploadStatus status,  Failure? failure)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( List<XFile> selectedImages,  List<UploadedFileModel> uploadedFiles,  bool isUploading,  double uploadProgress,  UploadStatus status,  Failure? failure)  $default,) {final _that = this;
 switch (_that) {
 case _UploadState():
-return $default(_that.selectedImages,_that.uploadedFiles,_that.isUploading,_that.status,_that.failure);case _:
+return $default(_that.selectedImages,_that.uploadedFiles,_that.isUploading,_that.uploadProgress,_that.status,_that.failure);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -195,10 +196,10 @@ return $default(_that.selectedImages,_that.uploadedFiles,_that.isUploading,_that
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( List<XFile> selectedImages,  List<UploadedFileModel> uploadedFiles,  bool isUploading,  UploadStatus status,  Failure? failure)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( List<XFile> selectedImages,  List<UploadedFileModel> uploadedFiles,  bool isUploading,  double uploadProgress,  UploadStatus status,  Failure? failure)?  $default,) {final _that = this;
 switch (_that) {
 case _UploadState() when $default != null:
-return $default(_that.selectedImages,_that.uploadedFiles,_that.isUploading,_that.status,_that.failure);case _:
+return $default(_that.selectedImages,_that.uploadedFiles,_that.isUploading,_that.uploadProgress,_that.status,_that.failure);case _:
   return null;
 
 }
@@ -210,7 +211,7 @@ return $default(_that.selectedImages,_that.uploadedFiles,_that.isUploading,_that
 
 
 class _UploadState implements UploadState {
-  const _UploadState({final  List<XFile> selectedImages = const [], final  List<UploadedFileModel> uploadedFiles = const [], this.isUploading = false, this.status = UploadStatus.initial, this.failure}): _selectedImages = selectedImages,_uploadedFiles = uploadedFiles;
+  const _UploadState({final  List<XFile> selectedImages = const [], final  List<UploadedFileModel> uploadedFiles = const [], this.isUploading = false, this.uploadProgress = 0.0, this.status = UploadStatus.initial, this.failure}): _selectedImages = selectedImages,_uploadedFiles = uploadedFiles;
   
 
  final  List<XFile> _selectedImages;
@@ -228,6 +229,7 @@ class _UploadState implements UploadState {
 }
 
 @override@JsonKey() final  bool isUploading;
+@override@JsonKey() final  double uploadProgress;
 @override@JsonKey() final  UploadStatus status;
 @override final  Failure? failure;
 
@@ -241,16 +243,16 @@ _$UploadStateCopyWith<_UploadState> get copyWith => __$UploadStateCopyWithImpl<_
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _UploadState&&const DeepCollectionEquality().equals(other._selectedImages, _selectedImages)&&const DeepCollectionEquality().equals(other._uploadedFiles, _uploadedFiles)&&(identical(other.isUploading, isUploading) || other.isUploading == isUploading)&&(identical(other.status, status) || other.status == status)&&(identical(other.failure, failure) || other.failure == failure));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _UploadState&&const DeepCollectionEquality().equals(other._selectedImages, _selectedImages)&&const DeepCollectionEquality().equals(other._uploadedFiles, _uploadedFiles)&&(identical(other.isUploading, isUploading) || other.isUploading == isUploading)&&(identical(other.uploadProgress, uploadProgress) || other.uploadProgress == uploadProgress)&&(identical(other.status, status) || other.status == status)&&(identical(other.failure, failure) || other.failure == failure));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_selectedImages),const DeepCollectionEquality().hash(_uploadedFiles),isUploading,status,failure);
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_selectedImages),const DeepCollectionEquality().hash(_uploadedFiles),isUploading,uploadProgress,status,failure);
 
 @override
 String toString() {
-  return 'UploadState(selectedImages: $selectedImages, uploadedFiles: $uploadedFiles, isUploading: $isUploading, status: $status, failure: $failure)';
+  return 'UploadState(selectedImages: $selectedImages, uploadedFiles: $uploadedFiles, isUploading: $isUploading, uploadProgress: $uploadProgress, status: $status, failure: $failure)';
 }
 
 
@@ -261,7 +263,7 @@ abstract mixin class _$UploadStateCopyWith<$Res> implements $UploadStateCopyWith
   factory _$UploadStateCopyWith(_UploadState value, $Res Function(_UploadState) _then) = __$UploadStateCopyWithImpl;
 @override @useResult
 $Res call({
- List<XFile> selectedImages, List<UploadedFileModel> uploadedFiles, bool isUploading, UploadStatus status, Failure? failure
+ List<XFile> selectedImages, List<UploadedFileModel> uploadedFiles, bool isUploading, double uploadProgress, UploadStatus status, Failure? failure
 });
 
 
@@ -278,12 +280,13 @@ class __$UploadStateCopyWithImpl<$Res>
 
 /// Create a copy of UploadState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? selectedImages = null,Object? uploadedFiles = null,Object? isUploading = null,Object? status = null,Object? failure = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? selectedImages = null,Object? uploadedFiles = null,Object? isUploading = null,Object? uploadProgress = null,Object? status = null,Object? failure = freezed,}) {
   return _then(_UploadState(
 selectedImages: null == selectedImages ? _self._selectedImages : selectedImages // ignore: cast_nullable_to_non_nullable
 as List<XFile>,uploadedFiles: null == uploadedFiles ? _self._uploadedFiles : uploadedFiles // ignore: cast_nullable_to_non_nullable
 as List<UploadedFileModel>,isUploading: null == isUploading ? _self.isUploading : isUploading // ignore: cast_nullable_to_non_nullable
-as bool,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
+as bool,uploadProgress: null == uploadProgress ? _self.uploadProgress : uploadProgress // ignore: cast_nullable_to_non_nullable
+as double,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as UploadStatus,failure: freezed == failure ? _self.failure : failure // ignore: cast_nullable_to_non_nullable
 as Failure?,
   ));
