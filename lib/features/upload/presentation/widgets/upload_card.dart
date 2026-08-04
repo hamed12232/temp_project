@@ -26,25 +26,15 @@ class UploadCard extends StatelessWidget {
       child: Stack(
         fit: StackFit.expand,
         children: [
-          // ── 1. Image Preview ─────────────────────────────────────────
           _ImagePreview(item: item),
-
-          // ── 2. Progress Overlay (Uploading) ─────────────────────────
           if (item.status == UploadItemStatus.uploading)
             _ProgressOverlay(progress: item.progress),
-
-          // ── 3. Success Badge ─────────────────────────────────────────
-          if (item.status == UploadItemStatus.success)
-            const _SuccessBadge(),
-
-          // ── 4. Failure Overlay ───────────────────────────────────────
+          if (item.status == UploadItemStatus.success) const _SuccessBadge(),
           if (item.status == UploadItemStatus.failure)
             _FailureOverlay(
               message: item.failure?.message ?? 'Upload failed',
               onRetry: onRetry,
             ),
-
-          // ── 5. Remove Button ─────────────────────────────────────────
           Positioned(
             top: 6.h,
             right: 6.w,
@@ -52,7 +42,7 @@ class UploadCard extends StatelessWidget {
               onTap: onRemove,
               child: Container(
                 padding: EdgeInsets.all(4.r),
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   color: Colors.black54,
                   shape: BoxShape.circle,
                 ),
@@ -83,10 +73,8 @@ class _ImagePreview extends StatelessWidget {
       return Image.network(
         item.uploadedFile!.path,
         fit: BoxFit.cover,
-        errorBuilder: (context, error, stackTrace) => Image.file(
-          File(item.image.path),
-          fit: BoxFit.cover,
-        ),
+        errorBuilder: (context, error, stackTrace) =>
+            Image.file(File(item.image.path), fit: BoxFit.cover),
       );
     }
 
@@ -113,8 +101,7 @@ class _ProgressOverlay extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isIndeterminate = progress < 0.0;
-    final clampedProgress = progress.clamp(0.0, 1.0);
-    final percentageInt = (clampedProgress * 100).toInt();
+    final targetProgress = progress.clamp(0.0, 1.0);
 
     return AnimatedContainer(
       duration: const Duration(milliseconds: 200),
@@ -129,23 +116,31 @@ class _ProgressOverlay extends StatelessWidget {
                   color: Colors.white,
                 ),
               )
-            : CircularPercentIndicator(
-                radius: 28.r,
-                lineWidth: 4.w,
-                percent: clampedProgress,
-                animation: true,
-                animateFromLastPercent: true,
-                progressColor: Colors.white,
-                backgroundColor: Colors.white24,
-                circularStrokeCap: CircularStrokeCap.round,
-                center: Text(
-                  '$percentageInt%',
-                  style: TextStyle(
-                    fontSize: 11.sp,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                ),
+            : TweenAnimationBuilder<double>(
+                tween: Tween<double>(begin: 0.0, end: targetProgress),
+                duration: const Duration(milliseconds: 700),
+                curve: Curves.easeOutCubic,
+                builder: (context, animatedValue, child) {
+                  final displayPercent = (animatedValue * 100).toInt();
+
+                  return CircularPercentIndicator(
+                    radius: 28.r,
+                    lineWidth: 4.w,
+                    percent: animatedValue.clamp(0.0, 1.0),
+                    animation: false,
+                    progressColor: Colors.white,
+                    backgroundColor: Colors.white24,
+                    circularStrokeCap: CircularStrokeCap.round,
+                    center: Text(
+                      '$displayPercent%',
+                      style: TextStyle(
+                        fontSize: 11.sp,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                  );
+                },
               ),
       ),
     );
@@ -195,10 +190,7 @@ class _FailureOverlay extends StatelessWidget {
   final String message;
   final VoidCallback onRetry;
 
-  const _FailureOverlay({
-    required this.message,
-    required this.onRetry,
-  });
+  const _FailureOverlay({required this.message, required this.onRetry});
 
   @override
   Widget build(BuildContext context) {
