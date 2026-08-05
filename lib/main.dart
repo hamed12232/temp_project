@@ -3,7 +3,7 @@ import 'dart:developer' as developer;
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:temp_project/core/di/injection.dart';
-import 'package:temp_project/features/upload/presentation/pages/upload_page.dart';
+import 'package:temp_project/features/stories/presentation/pages/stories_page.dart';
 
 import 'core/network/models/api_result.dart';
 import 'features/auth/domain/usecases/login_usecase.dart';
@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
         ),
-        home: const UploadPage(),
+        home: const StoriesPage(),
       ),
     );
   }

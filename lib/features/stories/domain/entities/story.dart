@@ -13,6 +13,7 @@ class Story extends Equatable {
   final String description;
   final String publishDate;
   final String time;
+  final Duration? duration;
 
   const Story({
     required this.id,
@@ -22,7 +23,12 @@ class Story extends Equatable {
     required this.description,
     required this.publishDate,
     required this.time,
+    this.duration,
   });
+
+  /// Returns the effective duration for an image story (custom backend duration or 5s default fallback).
+  Duration get effectiveImageDuration =>
+      duration ?? const Duration(seconds: 5);
 
   @override
   List<Object?> get props => [
@@ -33,5 +39,6 @@ class Story extends Equatable {
         description,
         publishDate,
         time,
+        duration,
       ];
 }

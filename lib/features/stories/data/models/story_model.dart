@@ -7,7 +7,8 @@ part 'story_model.g.dart';
 @JsonSerializable()
 class StoryModel {
   final dynamic id;
-  final String? type;
+  @JsonKey(name: 'media_type')
+  final String? mediaType;
   @JsonKey(name: 'media_url')
   final String? mediaUrl;
   final String? title;
@@ -15,15 +16,17 @@ class StoryModel {
   @JsonKey(name: 'publish_date')
   final String? publishDate;
   final String? time;
+  final int? duration;
 
   const StoryModel({
     this.id,
-    this.type,
+    this.mediaType,
     this.mediaUrl,
     this.title,
     this.description,
     this.publishDate,
     this.time,
+    this.duration,
   });
 
   factory StoryModel.fromJson(Map<String, dynamic> json) =>
@@ -34,7 +37,7 @@ class StoryModel {
   Story toEntity() {
     return Story(
       id: id?.toString() ?? '',
-      type: (type?.toLowerCase() == 'video')
+      type: (mediaType?.toLowerCase() == 'video')
           ? StoryType.video
           : StoryType.image,
       mediaUrl: mediaUrl ?? '',
@@ -42,6 +45,7 @@ class StoryModel {
       description: description ?? '',
       publishDate: publishDate ?? '',
       time: time ?? '',
+      duration: duration != null ? Duration(seconds: duration!) : null,
     );
   }
 }
