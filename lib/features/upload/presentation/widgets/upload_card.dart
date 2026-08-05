@@ -2,10 +2,10 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:percent_indicator/circular_percent_indicator.dart';
 
 import '../../../../core/utils/enums/enums.dart';
 import '../../domain/entities/upload_item.dart';
+import 'smooth_upload_progress_overlay.dart';
 
 class UploadCard extends StatelessWidget {
   final UploadItem item;
@@ -28,7 +28,7 @@ class UploadCard extends StatelessWidget {
         children: [
           _ImagePreview(item: item),
           if (item.status == UploadItemStatus.uploading)
-            _ProgressOverlay(progress: item.progress),
+            SmoothUploadProgressOverlay(progress: item.progress),
           if (item.status == UploadItemStatus.success) const _SuccessBadge(),
           if (item.status == UploadItemStatus.failure)
             _FailureOverlay(
@@ -88,60 +88,6 @@ class _ImagePreview extends StatelessWidget {
           color: colorScheme.onSurfaceVariant,
           size: 28.sp,
         ),
-      ),
-    );
-  }
-}
-
-class _ProgressOverlay extends StatelessWidget {
-  final double progress;
-
-  const _ProgressOverlay({required this.progress});
-
-  @override
-  Widget build(BuildContext context) {
-    final isIndeterminate = progress < 0.0;
-    final targetProgress = progress.clamp(0.0, 1.0);
-
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 200),
-      color: Colors.black.withValues(alpha: 0.55),
-      child: Center(
-        child: isIndeterminate
-            ? SizedBox(
-                width: 36.r,
-                height: 36.r,
-                child: const CircularProgressIndicator(
-                  strokeWidth: 3,
-                  color: Colors.white,
-                ),
-              )
-            : TweenAnimationBuilder<double>(
-                tween: Tween<double>(begin: 0.0, end: targetProgress),
-                duration: const Duration(milliseconds: 700),
-                curve: Curves.easeOutCubic,
-                builder: (context, animatedValue, child) {
-                  final displayPercent = (animatedValue * 100).toInt();
-
-                  return CircularPercentIndicator(
-                    radius: 28.r,
-                    lineWidth: 4.w,
-                    percent: animatedValue.clamp(0.0, 1.0),
-                    animation: false,
-                    progressColor: Colors.white,
-                    backgroundColor: Colors.white24,
-                    circularStrokeCap: CircularStrokeCap.round,
-                    center: Text(
-                      '$displayPercent%',
-                      style: TextStyle(
-                        fontSize: 11.sp,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
-                  );
-                },
-              ),
       ),
     );
   }
