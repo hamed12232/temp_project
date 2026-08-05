@@ -4,13 +4,13 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class StoryProgressBar extends StatelessWidget {
   final int count;
   final int currentIndex;
-  final Animation<double> animation;
+  final Animation<double>? animation;
 
   const StoryProgressBar({
     super.key,
     required this.count,
     required this.currentIndex,
-    required this.animation,
+    this.animation,
   });
 
   @override
@@ -45,40 +45,47 @@ class _SegmentBar extends StatelessWidget {
   final double height;
   final int index;
   final int currentIndex;
-  final Animation<double> animation;
+  final Animation<double>? animation;
 
   const _SegmentBar({
     required this.height,
     required this.index,
     required this.currentIndex,
-    required this.animation,
+    this.animation,
   });
 
   @override
   Widget build(BuildContext context) {
+    if (index < currentIndex) {
+      return _buildBar(widthFactor: 1.0);
+    } else if (index > currentIndex) {
+      return _buildBar(widthFactor: 0.0);
+    } else {
+      if (animation == null) {
+        return _buildBar(widthFactor: 1.0);
+      }
+      return AnimatedBuilder(
+        animation: animation!,
+        builder: (context, child) {
+          return _buildBar(widthFactor: animation!.value.clamp(0.0, 1.0));
+        },
+      );
+    }
+  }
+
+  Widget _buildBar({required double widthFactor}) {
     return Container(
       height: height,
       color: Colors.white.withValues(alpha: 0.35),
-      child: AnimatedBuilder(
-        animation: animation,
-        builder: (context, child) {
-          double factor = 0.0;
-          if (index < currentIndex) {
-            factor = 1.0;
-          } else if (index == currentIndex) {
-            factor = animation.value.clamp(0.0, 1.0);
-          } else {
-            factor = 0.0;
-          }
-
-          return FractionallySizedBox(
-            alignment: Alignment.centerLeft,
-            widthFactor: factor,
-            child: Container(
-              color: Colors.white,
-            ),
-          );
-        },
+      child: Align(
+        alignment: Alignment.centerLeft,
+        child: FractionallySizedBox(
+          widthFactor: widthFactor,
+          heightFactor: 1.0,
+          child: Container(
+            color: Colors.white,
+          ),
+        ),
       ),
     );
   }

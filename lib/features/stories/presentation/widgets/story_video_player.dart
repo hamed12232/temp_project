@@ -93,9 +93,16 @@ class _StoryVideoPlayerState extends State<StoryVideoPlayer> {
 
     final value = _controller!.value;
 
-    if (value.isBuffering != _isBuffering) {
+    // Ignore buffering indicator when the video is near or at the end
+    final bool isNearEnd = value.duration > Duration.zero &&
+        (value.position >= value.duration ||
+            (value.duration - value.position).inMilliseconds < 300);
+
+    final bool isBuffering = value.isBuffering && !isNearEnd;
+
+    if (isBuffering != _isBuffering) {
       setState(() {
-        _isBuffering = value.isBuffering;
+        _isBuffering = isBuffering;
       });
     }
 

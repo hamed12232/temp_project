@@ -15,11 +15,7 @@ class StoryViewer extends StatefulWidget {
   final List<Story> stories;
   final int initialIndex;
 
-  const StoryViewer({
-    super.key,
-    required this.stories,
-    this.initialIndex = 0,
-  });
+  const StoryViewer({super.key, required this.stories, this.initialIndex = 0});
 
   @override
   State<StoryViewer> createState() => _StoryViewerState();
@@ -42,14 +38,13 @@ class _StoryViewerState extends State<StoryViewer>
       widget.stories.isEmpty ? 0 : widget.stories.length - 1,
     );
 
-    _progressController = AnimationController(
-      vsync: this,
-      duration: const Duration(seconds: 5),
-    )..addStatusListener((status) {
-        if (status == AnimationStatus.completed) {
-          _navigateStory(_currentIndex + 1);
-        }
-      });
+    _progressController =
+        AnimationController(vsync: this, duration: const Duration(seconds: 5))
+          ..addStatusListener((status) {
+            if (status == AnimationStatus.completed) {
+              _navigateStory(_currentIndex + 1);
+            }
+          });
 
     _startStory();
   }
