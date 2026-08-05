@@ -32,6 +32,18 @@ import 'package:temp_project/features/auth/presentation/cubit/login_cubit.dart'
     as _i579;
 import 'package:temp_project/features/auth/presentation/cubit/otp_cubit.dart'
     as _i706;
+import 'package:temp_project/features/stories/data/datasource/remote/story_api_service.dart'
+    as _i563;
+import 'package:temp_project/features/stories/data/datasource/remote/story_remote_data_source.dart'
+    as _i306;
+import 'package:temp_project/features/stories/data/repositories/story_repository_impl.dart'
+    as _i548;
+import 'package:temp_project/features/stories/domain/repositories/story_repository.dart'
+    as _i21;
+import 'package:temp_project/features/stories/domain/usecases/get_stories_usecase.dart'
+    as _i544;
+import 'package:temp_project/features/stories/presentation/cubit/stories_cubit.dart'
+    as _i345;
 import 'package:temp_project/features/upload/data/datasource/upload_remote_datasource.dart'
     as _i342;
 import 'package:temp_project/features/upload/data/repository/upload_repository_impl.dart'
@@ -78,11 +90,20 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i342.UploadApiService>(
       () => networkModule.uploadApiService(gh<_i361.Dio>()),
     );
+    gh.lazySingleton<_i563.StoryApiService>(
+      () => networkModule.storyApiService(gh<_i361.Dio>()),
+    );
     gh.lazySingleton<_i342.UploadRemoteDataSource>(
       () => _i342.UploadRemoteDataSource(gh<_i342.UploadApiService>()),
     );
+    gh.lazySingleton<_i306.StoryRemoteDataSource>(
+      () => _i306.StoryRemoteDataSourceImpl(gh<_i563.StoryApiService>()),
+    );
     gh.lazySingleton<_i328.UploadRepository>(
       () => _i27.UploadRepositoryImpl(gh<_i342.UploadRemoteDataSource>()),
+    );
+    gh.lazySingleton<_i21.StoryRepository>(
+      () => _i548.StoryRepositoryImpl(gh<_i306.StoryRemoteDataSource>()),
     );
     gh.lazySingleton<_i859.AuthRepository>(
       () => _i320.AuthRepositoryImpl(gh<_i552.AuthApiService>()),
@@ -99,8 +120,14 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i23.UploadSingleImageUseCase>(),
       ),
     );
+    gh.lazySingleton<_i544.GetStoriesUseCase>(
+      () => _i544.GetStoriesUseCase(gh<_i21.StoryRepository>()),
+    );
     gh.factory<_i579.LoginCubit>(
       () => _i579.LoginCubit(gh<_i659.LoginUseCase>()),
+    );
+    gh.factory<_i345.StoriesCubit>(
+      () => _i345.StoriesCubit(gh<_i544.GetStoriesUseCase>()),
     );
     return this;
   }

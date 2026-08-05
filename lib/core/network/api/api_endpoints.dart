@@ -7,4 +7,5 @@ abstract class ApiEndpoints {
   static const String refreshToken = 'auth/refresh';
   static const String users = 'users';
   static const String userById = 'users/{id}';
+  static const String stories = 'stories';
 }
