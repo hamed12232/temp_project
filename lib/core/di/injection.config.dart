@@ -17,6 +17,8 @@ import 'package:injectable/injectable.dart' as _i526;
 import 'package:temp_project/core/di/network_module.dart' as _i689;
 import 'package:temp_project/core/network/dio/dio_factory.dart' as _i241;
 import 'package:temp_project/core/network/http/http_service.dart' as _i86;
+import 'package:temp_project/core/services/cache/video_cache_service.dart'
+    as _i936;
 import 'package:temp_project/core/services/image_picker/image_picker_service.dart'
     as _i717;
 import 'package:temp_project/core/storage/token_storage.dart' as _i472;
@@ -66,6 +68,7 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i706.OtpCubit>(() => _i706.OtpCubit());
     gh.lazySingleton<_i519.Client>(() => networkModule.client);
     gh.lazySingleton<_i558.FlutterSecureStorage>(() => networkModule.storage);
+    gh.lazySingleton<_i936.VideoCacheService>(() => _i936.VideoCacheService());
     gh.lazySingleton<_i717.ImagePickerService>(
       () => _i717.ImagePickerService(),
     );

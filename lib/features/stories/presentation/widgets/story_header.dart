@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../../../core/theme/app_styles.dart';
+import '../../../../gen/assets.gen.dart';
 import '../../domain/entities/story.dart';
+import 'story_text_animator.dart';
 
 class StoryHeader extends StatelessWidget {
   final Story story;
@@ -23,7 +26,7 @@ class StoryHeader extends StatelessWidget {
     ].join(' • ');
 
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+      padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 8.h),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -32,37 +35,14 @@ class StoryHeader extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text(
-                  story.title.isNotEmpty ? story.title : 'Legalive Stories',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 18.sp,
-                    fontWeight: FontWeight.bold,
-                    shadows: const [
-                      Shadow(
-                        blurRadius: 4,
-                        color: Colors.black45,
-                        offset: Offset(0, 1),
-                      ),
-                    ],
-                  ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
+                _buildSplitTitle(),
                 SizedBox(height: 2.h),
-                Text(
-                  formattedTime.isNotEmpty ? formattedTime : '2h',
-                  style: TextStyle(
-                    color: Colors.white70,
-                    fontSize: 12.sp,
-                    fontWeight: FontWeight.w500,
-                    shadows: const [
-                      Shadow(
-                        blurRadius: 4,
-                        color: Colors.black45,
-                        offset: Offset(0, 1),
-                      ),
-                    ],
+                StoryTextAnimator(
+                  beginOffset: const Offset(0.0, 8),
+                  child: Text(
+                    key: ValueKey('time_${story.id}'),
+                    formattedTime.isNotEmpty ? formattedTime : '2h',
+                    style: AppStyles.storyTimestamp,
                   ),
                 ),
               ],
@@ -71,21 +51,42 @@ class StoryHeader extends StatelessWidget {
           SizedBox(width: 12.w),
           GestureDetector(
             onTap: onActionTap ?? onClose,
-            child: Container(
-              padding: EdgeInsets.all(6.r),
-              decoration: const BoxDecoration(
-                color: Color(0xFFFF5722), // Vibrant orange matching screenshot
-                shape: BoxShape.circle,
-              ),
-              child: Icon(
-                Icons.add_rounded,
-                color: Colors.white,
-                size: 20.sp,
-              ),
+            child: Assets.images.addIcon.image(
+              width: 30.r,
+              height: 30.r,
+              fit: BoxFit.contain,
             ),
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildSplitTitle() {
+    final fullTitle = story.title.isNotEmpty ? story.title : 'Legalive Stories';
+
+    if (fullTitle.contains(' ')) {
+      final spaceIndex = fullTitle.indexOf(' ');
+      final prefix = fullTitle.substring(0, spaceIndex + 1);
+      final suffix = fullTitle.substring(spaceIndex + 1);
+
+      return RichText(
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+        text: TextSpan(
+          children: [
+            TextSpan(text: prefix, style: AppStyles.storyHeaderTitleLegalive),
+            TextSpan(text: suffix, style: AppStyles.storyHeaderTitleStories),
+          ],
+        ),
+      );
+    }
+
+    return Text(
+      fullTitle,
+      style: AppStyles.storyHeaderTitleLegalive,
+      maxLines: 1,
+      overflow: TextOverflow.ellipsis,
     );
   }
 }

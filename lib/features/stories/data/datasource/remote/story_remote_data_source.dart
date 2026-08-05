@@ -31,34 +31,37 @@ class StoryRemoteDataSourceImpl implements StoryRemoteDataSource {
       id: '1',
       mediaType: 'image',
       mediaUrl: 'https://img.youtube.com/vi/dQw4w9WgXcQ/maxresdefault.jpg',
-      title: 'Legalive Stories',
+      title: 'Legalive Image Story',
       description:
-          'Soft pastel gradient hero illustration, dreamy minimal 3D style, floating feather pen with a subtle metallic shine, gentle motion blur, abstract flowing shapes and soft light particles, clean spacious composition, premium modern app aesthetic, smooth glossy materials, soft shadows',
+          'Soft pastel gradient hero illustration, dreamy minimal 3D style, floating feather pen with a subtle metallic shine, gentle motion blur, abstract flowing shapes.',
       publishDate: '',
       time: '2h',
-      duration: null, // Default 5s fallback
+      duration: null, // Null -> defaults to 5s fallback
     ),
     StoryModel(
       id: '2',
       mediaType: 'image',
-      mediaUrl: 'https://img.youtube.com/vi/dQw4w9WgXcQ/maxresdefault.jpg',
-      title: 'Legalive Stories',
+      mediaUrl:
+          'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRW5ZLUJlmeKLOEusGySCttEqM6OEOKTHEqCaeSVyg1cw&s=10',
+      title: 'Legalive Image Story',
       description:
-          'Minimalist architecture design with warm sunset ambient lighting, smooth glass reflections, cinematic depth of field, and elegant typography presentation.',
+          'Soft pastel gradient hero illustration, dreamy minimal 3D style, floating feather pen with a subtle metallic shine, gentle motion blur, abstract flowing shapes.',
       publishDate: '',
-      time: '3h',
-      duration: 8, // Backend-controlled custom 8s duration
+      time: '2h',
+      duration: null, // Null -> defaults to 5s fallback
     ),
     StoryModel(
       id: '3',
-      mediaType: 'image',
-      mediaUrl: 'https://img.youtube.com/vi/dQw4w9WgXcQ/maxresdefault.jpg',
-      title: 'Legalive Stories',
+      mediaType: 'video',
+      mediaUrl:
+          'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4',
+      title: 'Legalive Video Story',
       description:
-          'Creative legal branding and modern visual identity overview, featuring responsive mobile UI components, fluid animations, and dark mode interface.',
+          'Cached video playback downloaded locally via VideoCacheService with exact video length matching.',
       publishDate: '',
       time: '5h',
-      duration: null,
+      duration:
+          null, // Auto-detects duration from local VideoPlayerController.file
     ),
   ];
 }

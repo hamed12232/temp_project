@@ -2,16 +2,24 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../../../core/theme/app_styles.dart';
 import '../../domain/entities/story.dart';
+import 'story_video_player.dart';
 
 class StoryViewItem extends StatelessWidget {
   final Story story;
   final bool isPaused;
+  final ValueChanged<Duration>? onVideoInitialized;
+  final ValueChanged<Duration>? onPositionChanged;
+  final VoidCallback? onVideoEnded;
 
   const StoryViewItem({
     super.key,
     required this.story,
     this.isPaused = false,
+    this.onVideoInitialized,
+    this.onPositionChanged,
+    this.onVideoEnded,
   });
 
   @override
@@ -19,7 +27,7 @@ class StoryViewItem extends StatelessWidget {
     return Stack(
       fit: StackFit.expand,
       children: [
-        // Background Media Image
+        // Background Media Content (Image or Cached Video)
         _buildMediaContent(),
 
         // Top dark gradient overlay for header and progress bar readability
@@ -56,27 +64,14 @@ class StoryViewItem extends StatelessWidget {
           ),
         ),
 
-        // Bottom description text matching screenshot typography
+        // Bottom description text matching screenshot Domine typography specs
         Positioned(
           bottom: 40.h,
           left: 20.w,
           right: 20.w,
           child: Text(
             story.description,
-            style: TextStyle(
-              color: Colors.white.withValues(alpha: 0.95),
-              fontSize: 14.sp,
-              height: 1.45,
-              fontWeight: FontWeight.w400,
-              letterSpacing: 0.2,
-              shadows: const [
-                Shadow(
-                  blurRadius: 6,
-                  color: Colors.black54,
-                  offset: Offset(0, 2),
-                ),
-              ],
-            ),
+            style: AppStyles.storyDescription,
             maxLines: 6,
             overflow: TextOverflow.ellipsis,
           ),
@@ -86,6 +81,16 @@ class StoryViewItem extends StatelessWidget {
   }
 
   Widget _buildMediaContent() {
+    if (story.type == StoryType.video) {
+      return StoryVideoPlayer(
+        story: story,
+        isPaused: isPaused,
+        onVideoInitialized: (duration) => onVideoInitialized?.call(duration),
+        onPositionChanged: (position) => onPositionChanged?.call(position),
+        onVideoEnded: onVideoEnded,
+      );
+    }
+
     return CachedNetworkImage(
       imageUrl: story.mediaUrl,
       fit: BoxFit.cover,

@@ -1,10 +1,15 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../../../core/di/injection.dart';
+import '../../../../core/services/cache/video_cache_service.dart';
+import '../../../../core/theme/app_styles.dart';
 import '../../domain/entities/story.dart';
 import 'story_header.dart';
+import 'story_media_transition.dart';
 import 'story_progress_bar.dart';
-import 'story_view_item.dart';
+import 'story_text_animator.dart';
 
 class StoryViewer extends StatefulWidget {
   final List<Story> stories;
@@ -22,10 +27,10 @@ class StoryViewer extends StatefulWidget {
 
 class _StoryViewerState extends State<StoryViewer>
     with SingleTickerProviderStateMixin {
-  late AnimationController _animController;
+  late AnimationController _progressController;
   late int _currentIndex;
-  bool _isPaused = false;
 
+  bool _isPaused = false;
   DateTime? _pressStartTime;
   Offset? _tapPosition;
 
@@ -37,78 +42,86 @@ class _StoryViewerState extends State<StoryViewer>
       widget.stories.isEmpty ? 0 : widget.stories.length - 1,
     );
 
-    _animController = AnimationController(
+    _progressController = AnimationController(
       vsync: this,
       duration: const Duration(seconds: 5),
-    );
-
-    _animController.addStatusListener((status) {
-      if (status == AnimationStatus.completed) {
-        _nextStory();
-      }
-    });
+    )..addStatusListener((status) {
+        if (status == AnimationStatus.completed) {
+          _navigateStory(_currentIndex + 1);
+        }
+      });
 
     _startStory();
   }
 
   void _startStory() {
-    _animController.stop();
-    _animController.reset();
+    _progressController.stop();
+    _progressController.reset();
 
     if (widget.stories.isEmpty) return;
 
     final currentStory = widget.stories[_currentIndex];
-    _animController.duration = currentStory.effectiveImageDuration;
+    _preloadNextStory(_currentIndex + 1);
 
-    if (!_isPaused) {
-      _animController.forward();
-    }
-  }
-
-  void _nextStory() {
-    if (_currentIndex < widget.stories.length - 1) {
-      setState(() {
-        _currentIndex++;
-      });
-      _startStory();
-    } else {
-      _animController.stop();
-      if (mounted) {
-        Navigator.of(context).pop();
+    if (currentStory.type == StoryType.image) {
+      _progressController.duration = currentStory.effectiveImageDuration;
+      if (!_isPaused) {
+        _progressController.forward();
       }
     }
   }
 
-  void _previousStory() {
-    if (_currentIndex > 0) {
-      setState(() {
-        _currentIndex--;
-      });
-      _startStory();
-    } else {
-      _startStory();
+  void _preloadNextStory(int nextIndex) {
+    if (nextIndex < widget.stories.length) {
+      final nextStory = widget.stories[nextIndex];
+      if (nextStory.type == StoryType.image) {
+        try {
+          precacheImage(
+            CachedNetworkImageProvider(nextStory.mediaUrl),
+            context,
+          );
+        } catch (_) {}
+      } else if (nextStory.type == StoryType.video) {
+        sl<VideoCacheService>().preloadVideo(nextStory.mediaUrl);
+      }
     }
+  }
+
+  void _navigateStory(int targetIndex) {
+    if (widget.stories.isEmpty) return;
+
+    if (targetIndex < 0) {
+      _startStory();
+      return;
+    }
+
+    if (targetIndex >= widget.stories.length) {
+      _progressController.stop();
+      return;
+    }
+
+    setState(() {
+      _currentIndex = targetIndex;
+    });
+
+    _startStory();
   }
 
   void _pause() {
     if (!_isPaused) {
-      setState(() {
-        _isPaused = true;
-      });
+      setState(() => _isPaused = true);
     }
-    if (_animController.isAnimating) {
-      _animController.stop();
+    if (_progressController.isAnimating) {
+      _progressController.stop();
     }
   }
 
   void _resume() {
     if (_isPaused) {
-      setState(() {
-        _isPaused = false;
-      });
+      setState(() => _isPaused = false);
     }
-    if (!_animController.isAnimating) {
-      _animController.forward();
+    if (!_progressController.isAnimating) {
+      _progressController.forward();
     }
   }
 
@@ -120,34 +133,33 @@ class _StoryViewerState extends State<StoryViewer>
 
   void _handleTapUp(TapUpDetails details) {
     _resume();
-
     if (_pressStartTime != null && _tapPosition != null) {
       final pressDuration = DateTime.now().difference(_pressStartTime!);
-
-      // Only navigate if it was a quick tap (< 250ms), otherwise treat as long-press release
       if (pressDuration.inMilliseconds < 250) {
         final screenWidth = MediaQuery.of(context).size.width;
         if (_tapPosition!.dx < screenWidth / 2) {
-          _previousStory();
+          _navigateStory(_currentIndex - 1);
         } else {
-          _nextStory();
+          _navigateStory(_currentIndex + 1);
         }
       }
     }
-
     _pressStartTime = null;
     _tapPosition = null;
   }
 
-  void _handleTapCancel() {
-    _resume();
-    _pressStartTime = null;
-    _tapPosition = null;
+  void _onVideoInitialized(Duration videoDuration) {
+    if (!mounted) return;
+    _progressController.duration = videoDuration;
+    _progressController.reset();
+    if (!_isPaused) {
+      _progressController.forward();
+    }
   }
 
   @override
   void dispose() {
-    _animController.dispose();
+    _progressController.dispose();
     super.dispose();
   }
 
@@ -156,12 +168,7 @@ class _StoryViewerState extends State<StoryViewer>
     if (widget.stories.isEmpty) {
       return const Scaffold(
         backgroundColor: Colors.black,
-        body: Center(
-          child: Text(
-            'No stories available',
-            style: TextStyle(color: Colors.white),
-          ),
-        ),
+        body: SizedBox.shrink(),
       );
     }
 
@@ -173,17 +180,63 @@ class _StoryViewerState extends State<StoryViewer>
         behavior: HitTestBehavior.opaque,
         onTapDown: _handleTapDown,
         onTapUp: _handleTapUp,
-        onTapCancel: _handleTapCancel,
+        onTapCancel: () {
+          _resume();
+          _pressStartTime = null;
+          _tapPosition = null;
+        },
         child: Stack(
           fit: StackFit.expand,
           children: [
-            // Background Story Item
-            StoryViewItem(
+            StoryMediaTransition(
               story: currentStory,
               isPaused: _isPaused,
+              onVideoInitialized: _onVideoInitialized,
             ),
-
-            // Top Progress Bar and Header Overlay
+            Positioned(
+              top: 0,
+              left: 0,
+              right: 0,
+              height: 160.h,
+              child: Container(
+                decoration: const BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [Colors.black87, Colors.transparent],
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                  ),
+                ),
+              ),
+            ),
+            Positioned(
+              bottom: 0,
+              left: 0,
+              right: 0,
+              height: 240.h,
+              child: Container(
+                decoration: const BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [Colors.transparent, Colors.black87],
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                  ),
+                ),
+              ),
+            ),
+            Positioned(
+              bottom: 40.h,
+              left: 20.w,
+              right: 20.w,
+              child: StoryTextAnimator(
+                child: Text(
+                  key: ValueKey('desc_${currentStory.id}'),
+                  currentStory.description,
+                  style: AppStyles.storyDescription,
+                  maxLines: 6,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ),
             Positioned(
               top: MediaQuery.of(context).padding.top + 4.h,
               left: 0,
@@ -194,7 +247,7 @@ class _StoryViewerState extends State<StoryViewer>
                   StoryProgressBar(
                     count: widget.stories.length,
                     currentIndex: _currentIndex,
-                    animation: _animController,
+                    animation: _progressController,
                   ),
                   StoryHeader(
                     story: currentStory,
