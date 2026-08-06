@@ -3,6 +3,7 @@ import 'dart:developer' as developer;
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:temp_project/core/di/injection.dart';
+import 'package:temp_project/core/theme/app_theme.dart';
 import 'package:temp_project/features/stories/presentation/pages/stories_page.dart';
 
 import 'core/network/models/api_result.dart';
@@ -25,10 +26,8 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'OTP Test App',
         debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-          useMaterial3: true,
-        ),
+           theme: AppTheme.light,
+
         home: const StoriesPage(),
       ),
     );

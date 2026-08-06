@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:temp_project/core/theme/app_text_styles.dart';
 
-import '../../../../core/theme/app_styles.dart';
 import '../../../../gen/assets.gen.dart';
 import '../../domain/entities/story.dart';
 import 'story_text_animator.dart';
@@ -42,7 +42,7 @@ class StoryHeader extends StatelessWidget {
                   child: Text(
                     key: ValueKey('time_${story.id}'),
                     formattedTime.isNotEmpty ? formattedTime : '2h',
-                    style: AppStyles.storyTimestamp,
+                    style: AppTextStyles.storyTimestamp,
                   ),
                 ),
               ],
@@ -75,8 +75,14 @@ class StoryHeader extends StatelessWidget {
         overflow: TextOverflow.ellipsis,
         text: TextSpan(
           children: [
-            TextSpan(text: prefix, style: AppStyles.storyHeaderTitleLegalive),
-            TextSpan(text: suffix, style: AppStyles.storyHeaderTitleStories),
+            TextSpan(
+              text: prefix,
+              style: AppTextStyles.storyHeaderTitleLegalive,
+            ),
+            TextSpan(
+              text: suffix,
+              style: AppTextStyles.storyHeaderTitleStories,
+            ),
           ],
         ),
       );
@@ -84,7 +90,7 @@ class StoryHeader extends StatelessWidget {
 
     return Text(
       fullTitle,
-      style: AppStyles.storyHeaderTitleLegalive,
+      style: AppTextStyles.storyHeaderTitleLegalive,
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
     );

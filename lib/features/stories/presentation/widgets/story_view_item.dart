@@ -1,8 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:temp_project/core/theme/app_text_styles.dart';
 
-import '../../../../core/theme/app_styles.dart';
 import '../../domain/entities/story.dart';
 import 'story_video_player.dart';
 
@@ -71,7 +71,7 @@ class StoryViewItem extends StatelessWidget {
           right: 20.w,
           child: Text(
             story.description,
-            style: AppStyles.storyDescription,
+            style: AppTextStyles.storyDescription,
             maxLines: 6,
             overflow: TextOverflow.ellipsis,
           ),

@@ -1,10 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:temp_project/core/theme/app_text_styles.dart';
 
 import '../../../../core/di/injection.dart';
 import '../../../../core/services/cache/video_cache_service.dart';
-import '../../../../core/theme/app_styles.dart';
 import '../../domain/entities/story.dart';
 import 'story_header.dart';
 import 'story_media_transition.dart';
@@ -23,7 +23,8 @@ class StoryViewer extends StatefulWidget {
 
 class _StoryViewerState extends State<StoryViewer>
     with SingleTickerProviderStateMixin {
-  late AnimationController _progressController;
+  late AnimationController
+  _progressController; //عامل زي التايمر كده بس بتفاصيل اكتر
   late int _currentIndex;
 
   bool _isPaused = false;
@@ -42,6 +43,7 @@ class _StoryViewerState extends State<StoryViewer>
         AnimationController(vsync: this, duration: const Duration(seconds: 5))
           ..addStatusListener((status) {
             if (status == AnimationStatus.completed) {
+              //بيسأل وصلنا لاخر الاستوري ولا لا
               _navigateStory(_currentIndex + 1);
             }
           });
@@ -226,7 +228,7 @@ class _StoryViewerState extends State<StoryViewer>
                 child: Text(
                   key: ValueKey('desc_${currentStory.id}'),
                   currentStory.description,
-                  style: AppStyles.storyDescription,
+                  style: AppTextStyles.storyDescription,
                   maxLines: 6,
                   overflow: TextOverflow.ellipsis,
                 ),
