@@ -104,13 +104,3 @@ flutter:
           weight: 600
         - asset: assets/fonts/DMSans-Bold.ttf
           weight: 700
-    - family: Domine
-      fonts:
-        - asset: assets/fonts/Domine-Regular.ttf
-          weight: 400
-        - asset: assets/fonts/Domine-Medium.ttf
-          weight: 500
-        - asset: assets/fonts/Domine-SemiBold.ttf
-          weight: 600
-        - asset: assets/fonts/Domine-Bold.ttf
-          weight: 700

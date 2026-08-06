@@ -13,7 +13,6 @@ class AppTextStyles {
   AppTextStyles._();
 
   static const String _dmSans = 'DMSans';
-  static const String _domine = 'Domine';
 
   // ---------------------------------------------------------------------
   // Display / Headline (DM Sans)
@@ -101,7 +100,7 @@ class AppTextStyles {
     Color color = AppColors.primary,
   }) =>
       TextStyle(
-        fontFamily: _domine,
+        fontFamily: _dmSans,
         fontSize: fontSize,
         height: height,
         fontWeight: FontWeight.w700,
@@ -110,7 +109,7 @@ class AppTextStyles {
 
   /// Card title set in Domine Bold (e.g. "Get notarized doc").
   static TextStyle get titleDomine => const TextStyle(
-        fontFamily: _domine,
+        fontFamily: _dmSans,
         fontSize: 18,
         fontWeight: FontWeight.w700,
         color: AppColors.textPrimary,
@@ -273,7 +272,7 @@ class AppTextStyles {
 
 //stories
   static TextStyle get storyHeaderTitleLegalive => TextStyle(
-        fontFamily: _domine,
+        fontFamily: _dmSans,
         fontSize: 20.sp,
         fontWeight: FontWeight.w400,
         height: 1.0,
@@ -307,7 +306,7 @@ class AppTextStyles {
 
   /// Story Description Body: Domine, Regular (400), 14px, 20px line height (1.428)
   static TextStyle get storyDescription => TextStyle(
-        fontFamily: _domine,
+        fontFamily: _dmSans,
         fontSize: 14.sp,
         fontWeight: FontWeight.w400,
         height: 20 / 14,

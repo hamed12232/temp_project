@@ -118,25 +118,33 @@ class _StoryViewerState extends State<StoryViewer>
       setState(() => _isPaused = false);
     }
     if (!_progressController.isAnimating) {
-      _progressController.forward();
+      _progressController
+          .forward(); //بيكمل من المكان اللي وقف عنده مش بيبدء من جديد
     }
   }
 
   void _handleTapDown(TapDownDetails details) {
+    //اول ماالصباع يجي ع الشاشة
     _pressStartTime = DateTime.now();
     _tapPosition = details.globalPosition;
     _pause();
   }
 
   void _handleTapUp(TapUpDetails details) {
-    _resume();
+    //اول ما يشيل صباعه
+    _resume(); //رجع يكمل تاني
     if (_pressStartTime != null && _tapPosition != null) {
-      final pressDuration = DateTime.now().difference(_pressStartTime!);
+      final pressDuration = DateTime.now().difference(
+        _pressStartTime!,
+      ); //بيشوف ضغط قد اي
       if (pressDuration.inMilliseconds < 250) {
+        //لو اقل من ربع ثانيه يعتبر ضغطه بس عشان يقلب
         final screenWidth = MediaQuery.of(context).size.width;
         if (_tapPosition!.dx < screenWidth / 2) {
+          //لو صباعه في النصف الشمال يبقى يرجع لورا
           _navigateStory(_currentIndex - 1);
         } else {
+          //لو صباعه في النصف اليمين يبقى يتقدم لادام
           _navigateStory(_currentIndex + 1);
         }
       }
@@ -146,8 +154,9 @@ class _StoryViewerState extends State<StoryViewer>
   }
 
   void _onVideoInitialized(Duration videoDuration) {
-    if (!mounted) return;
-    _progressController.duration = videoDuration;
+    if (!mounted) return; //بيتاكد ان اليو اي لسه موجود عشان ميحصلش ايرور
+    _progressController.duration =
+        videoDuration; //بيدي للبروجرس كنترولر مدة الفيديو
     _progressController.reset();
     if (!_isPaused) {
       _progressController.forward();
@@ -162,13 +171,6 @@ class _StoryViewerState extends State<StoryViewer>
 
   @override
   Widget build(BuildContext context) {
-    if (widget.stories.isEmpty) {
-      return const Scaffold(
-        backgroundColor: Colors.black,
-        body: SizedBox.shrink(),
-      );
-    }
-
     final currentStory = widget.stories[_currentIndex];
 
     return Scaffold(
