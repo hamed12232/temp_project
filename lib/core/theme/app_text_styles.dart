@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'app_colors.dart';
 
 
@@ -13,13 +12,17 @@ import 'app_colors.dart';
 class AppTextStyles {
   AppTextStyles._();
 
+  static const String _dmSans = 'DMSans';
+  static const String _domine = 'Domine';
+
   // ---------------------------------------------------------------------
   // Display / Headline (DM Sans)
   // ---------------------------------------------------------------------
 
   /// Hero heading, e.g. "How can we help with your Power of Attorney?"
   /// 36 / 40, SemiBold.
-  static TextStyle get displayHero => GoogleFonts.dmSans(
+  static TextStyle get displayHero => const TextStyle(
+        fontFamily: _dmSans,
         fontSize: 36,
         height: 40 / 36,
         fontWeight: FontWeight.w600,
@@ -28,7 +31,8 @@ class AppTextStyles {
 
   /// Page-level heading used on content screens, e.g.
   /// "Power of Attorney · Buying Property". 32 / 40, Medium.
-  static TextStyle get displayPage => GoogleFonts.dmSans(
+  static TextStyle get displayPage => const TextStyle(
+        fontFamily: _dmSans,
         fontSize: 32,
         height: 40 / 32,
         fontWeight: FontWeight.w500,
@@ -37,7 +41,8 @@ class AppTextStyles {
 
   /// Confirmation-screen large heading, e.g. "Your request is now in
   /// progress". 32 / 40, SemiBold.
-  static TextStyle get displayConfirmation => GoogleFonts.dmSans(
+  static TextStyle get displayConfirmation => const TextStyle(
+        fontFamily: _dmSans,
         fontSize: 32,
         height: 40 / 32,
         fontWeight: FontWeight.w600,
@@ -47,7 +52,8 @@ class AppTextStyles {
   /// Flow-step heading, e.g. "Power of Attorney Contact &
   /// Notarization" / "Select the Powers to Grant.". 27 / normal,
   /// Medium, with the accent phrase set in [displayAccent].
-  static TextStyle get displayStep => GoogleFonts.dmSans(
+  static TextStyle get displayStep => const TextStyle(
+        fontFamily: _dmSans,
         fontSize: 27,
         fontWeight: FontWeight.w500,
         color: AppColors.textPrimary,
@@ -55,7 +61,8 @@ class AppTextStyles {
       );
 
   /// Screen / nav-bar title. 20 / 20, Medium.
-  static TextStyle get titleLarge => GoogleFonts.dmSans(
+  static TextStyle get titleLarge => const TextStyle(
+        fontFamily: _dmSans,
         fontSize: 20,
         height: 20 / 20,
         fontWeight: FontWeight.w500,
@@ -63,7 +70,8 @@ class AppTextStyles {
       );
 
   /// Card / list-item title. 18 / 20, Medium.
-  static TextStyle get titleMedium => GoogleFonts.dmSans(
+  static TextStyle get titleMedium => const TextStyle(
+        fontFamily: _dmSans,
         fontSize: 18,
         height: 20 / 18,
         fontWeight: FontWeight.w500,
@@ -72,7 +80,8 @@ class AppTextStyles {
 
   /// Section title with a leading accent-bar (e.g. "Documents to
   /// prepare", "How it works"). 16 / normal, SemiBold.
-  static TextStyle get titleSection => GoogleFonts.dmSans(
+  static TextStyle get titleSection => const TextStyle(
+        fontFamily: _dmSans,
         fontSize: 16,
         fontWeight: FontWeight.w600,
         color: AppColors.textPrimary,
@@ -91,7 +100,8 @@ class AppTextStyles {
     double? height,
     Color color = AppColors.primary,
   }) =>
-      GoogleFonts.domine(
+      TextStyle(
+        fontFamily: _domine,
         fontSize: fontSize,
         height: height,
         fontWeight: FontWeight.w700,
@@ -99,7 +109,8 @@ class AppTextStyles {
       );
 
   /// Card title set in Domine Bold (e.g. "Get notarized doc").
-  static TextStyle get titleDomine => GoogleFonts.domine(
+  static TextStyle get titleDomine => const TextStyle(
+        fontFamily: _domine,
         fontSize: 18,
         fontWeight: FontWeight.w700,
         color: AppColors.textPrimary,
@@ -110,7 +121,8 @@ class AppTextStyles {
   // ---------------------------------------------------------------------
 
   /// Standard body / option-row text. 16 / 20, Medium.
-  static TextStyle get bodyLarge => GoogleFonts.dmSans(
+  static TextStyle get bodyLarge => const TextStyle(
+        fontFamily: _dmSans,
         fontSize: 16,
         height: 20 / 16,
         fontWeight: FontWeight.w500,
@@ -118,7 +130,8 @@ class AppTextStyles {
       );
 
   /// Subtitle / instruction text under a hero heading. 16 / 32, Medium.
-  static TextStyle get bodySubtitle => GoogleFonts.dmSans(
+  static TextStyle get bodySubtitle => const TextStyle(
+        fontFamily: _dmSans,
         fontSize: 16,
         height: 32 / 16,
         fontWeight: FontWeight.w500,
@@ -128,7 +141,8 @@ class AppTextStyles {
   /// Paragraph copy under a [displayPage] / [displayStep] heading.
   /// 13–16 / normal, Regular. Use [bodyParagraphSmall] for the 13px
   /// variant.
-  static TextStyle get bodyParagraph => GoogleFonts.dmSans(
+  static TextStyle get bodyParagraph => const TextStyle(
+        fontFamily: _dmSans,
         fontSize: 16,
         height: 24 / 16,
         fontWeight: FontWeight.w500,
@@ -137,7 +151,8 @@ class AppTextStyles {
 
   /// Smaller paragraph copy (form/checklist screen descriptions).
   /// 13 / normal, Regular.
-  static TextStyle get bodyParagraphSmall => GoogleFonts.dmSans(
+  static TextStyle get bodyParagraphSmall => const TextStyle(
+        fontFamily: _dmSans,
         fontSize: 13,
         fontWeight: FontWeight.w400,
         color: AppColors.textMuted,
@@ -145,7 +160,8 @@ class AppTextStyles {
       );
 
   /// Standard pill-button / chip label. 14 / 20, Medium.
-  static TextStyle get bodyMedium => GoogleFonts.dmSans(
+  static TextStyle get bodyMedium => const TextStyle(
+        fontFamily: _dmSans,
         fontSize: 14,
         height: 20 / 14,
         fontWeight: FontWeight.w500,
@@ -154,14 +170,16 @@ class AppTextStyles {
 
   /// Checklist item title (14px Medium) — pair with
   /// [bodyChecklistDescription] for the 12px description below it.
-  static TextStyle get bodyChecklistTitle => GoogleFonts.dmSans(
+  static TextStyle get bodyChecklistTitle => const TextStyle(
+        fontFamily: _dmSans,
         fontSize: 14,
         fontWeight: FontWeight.w500,
         color: AppColors.textPrimary,
       );
 
   /// Checklist item description. 12 / normal, Regular.
-  static TextStyle get bodyChecklistDescription => GoogleFonts.dmSans(
+  static TextStyle get bodyChecklistDescription => const TextStyle(
+        fontFamily: _dmSans,
         fontSize: 12,
         fontWeight: FontWeight.w400,
         color: AppColors.textMuted,
@@ -169,7 +187,8 @@ class AppTextStyles {
       );
 
   /// Card description copy. 11 / 15, Light.
-  static TextStyle get bodySmall => GoogleFonts.dmSans(
+  static TextStyle get bodySmall => const TextStyle(
+        fontFamily: _dmSans,
         fontSize: 11,
         height: 15 / 11,
         fontWeight: FontWeight.w300,
@@ -181,7 +200,8 @@ class AppTextStyles {
   // ---------------------------------------------------------------------
 
   /// Primary pill-button label. 16 / normal, Bold.
-  static TextStyle get button => GoogleFonts.dmSans(
+  static TextStyle get button => const TextStyle(
+        fontFamily: _dmSans,
         fontSize: 16,
         fontWeight: FontWeight.w700,
         color: AppColors.textOnPrimary,
@@ -192,7 +212,8 @@ class AppTextStyles {
   // ---------------------------------------------------------------------
 
   /// Footnote / support-link text. 12 / 20, Medium.
-  static TextStyle get labelMedium => GoogleFonts.dmSans(
+  static TextStyle get labelMedium => const TextStyle(
+        fontFamily: _dmSans,
         fontSize: 12,
         height: 20 / 12,
         fontWeight: FontWeight.w500,
@@ -200,7 +221,8 @@ class AppTextStyles {
       );
 
   /// Small chip label (e.g. "Chat"). 8 / 20, Medium.
-  static TextStyle get labelSmall => GoogleFonts.dmSans(
+  static TextStyle get labelSmall => const TextStyle(
+        fontFamily: _dmSans,
         fontSize: 8,
         height: 20 / 8,
         fontWeight: FontWeight.w500,
@@ -209,7 +231,8 @@ class AppTextStyles {
 
   /// Field / row label paired with a value (e.g. "Service",
   /// "Status", "Request ID"). 14 / normal, Regular.
-  static TextStyle get fieldLabel => GoogleFonts.dmSans(
+  static TextStyle get fieldLabel => const TextStyle(
+        fontFamily: _dmSans,
         fontSize: 14,
         fontWeight: FontWeight.w400,
         color: AppColors.textSecondary,
@@ -217,7 +240,8 @@ class AppTextStyles {
       );
 
   /// Field value paired with [fieldLabel]. 14 / normal, Medium.
-  static TextStyle get fieldValue => GoogleFonts.dmSans(
+  static TextStyle get fieldValue => const TextStyle(
+        fontFamily: _dmSans,
         fontSize: 14,
         fontWeight: FontWeight.w500,
         color: AppColors.textBodyAlt,
@@ -226,7 +250,8 @@ class AppTextStyles {
 
   /// Floating input label (e.g. "Email Address", "Phone Number").
   /// 12 / 16, Medium, tight tracking.
-  static TextStyle get inputLabel => GoogleFonts.dmSans(
+  static TextStyle get inputLabel => const TextStyle(
+        fontFamily: _dmSans,
         fontSize: 12,
         height: 16 / 12,
         fontWeight: FontWeight.w500,
@@ -235,7 +260,8 @@ class AppTextStyles {
       );
 
   /// Input placeholder / value text. 14 / 24, Regular, tight tracking.
-  static TextStyle get inputText => GoogleFonts.dmSans(
+  static TextStyle get inputText => const TextStyle(
+        fontFamily: _dmSans,
         fontSize: 14,
         height: 24 / 14,
         fontWeight: FontWeight.w400,
@@ -243,16 +269,11 @@ class AppTextStyles {
         letterSpacing: -0.3,
       );
 
-  /// Status-bar clock. 15 / 20, SemiBold, Poppins.
-  static TextStyle get statusBarTime => GoogleFonts.poppins(
-        fontSize: 15,
-        height: 20 / 15,
-        fontWeight: FontWeight.w600,
-        fontStyle: FontStyle.normal,
-        color: AppColors.textNeutral1000,
-      );
+
+
 //stories
-  static TextStyle get storyHeaderTitleLegalive => GoogleFonts.domine(
+  static TextStyle get storyHeaderTitleLegalive => TextStyle(
+        fontFamily: _domine,
         fontSize: 20.sp,
         fontWeight: FontWeight.w400,
         height: 1.0,
@@ -268,7 +289,8 @@ class AppTextStyles {
       );
 
   /// Header Title Suffix ("Stories"): DM Sans, Regular (400), 20px, 20px line height (1.0)
-  static TextStyle get storyHeaderTitleStories => GoogleFonts.dmSans(
+  static TextStyle get storyHeaderTitleStories => TextStyle(
+        fontFamily: _dmSans,
         fontSize: 20.sp,
         fontWeight: FontWeight.w400,
         height: 1.0,
@@ -284,7 +306,8 @@ class AppTextStyles {
       );
 
   /// Story Description Body: Domine, Regular (400), 14px, 20px line height (1.428)
-  static TextStyle get storyDescription => GoogleFonts.domine(
+  static TextStyle get storyDescription => TextStyle(
+        fontFamily: _domine,
         fontSize: 14.sp,
         fontWeight: FontWeight.w400,
         height: 20 / 14,
@@ -300,7 +323,8 @@ class AppTextStyles {
       );
 
   /// Story Timestamp ("2h"): DM Sans, Regular (400), 12px
-  static TextStyle get storyTimestamp => GoogleFonts.dmSans(
+  static TextStyle get storyTimestamp => TextStyle(
+        fontFamily: _dmSans,
         fontSize: 12.sp,
         fontWeight: FontWeight.w400,
         height: 1.33,
