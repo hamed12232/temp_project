@@ -25,7 +25,7 @@ class StoryMediaTransition extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedSwitcher(
+    return AnimatedSwitcher( // بيخلي الستاك يتغير بسلاسه من غير اي حركة بيستجاب اول ما المحتوي يتغير
       duration: const Duration(milliseconds: 300),
       switchInCurve: Curves.easeInOut,
       switchOutCurve: Curves.easeInOut,

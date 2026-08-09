@@ -176,16 +176,16 @@ class _StoryViewerState extends State<StoryViewer>
     return Scaffold(
       backgroundColor: Colors.black,
       body: GestureDetector(
-        behavior: HitTestBehavior.opaque,
+        behavior: HitTestBehavior.opaque, // بيخلي الجيستشر يسمع كل الضغطات في اي مكان
         onTapDown: _handleTapDown,
         onTapUp: _handleTapUp,
-        onTapCancel: () {
+        onTapCancel: () {// بيعمل ريزيوم لو حصل كسل
           _resume();
           _pressStartTime = null;
           _tapPosition = null;
         },
         child: Stack(
-          fit: StackFit.expand,
+          fit: StackFit.expand, // بيخلي الستاك ياخد مساحة الشاشة كلها
           children: [
             StoryMediaTransition(
               story: currentStory,

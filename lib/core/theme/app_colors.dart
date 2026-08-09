@@ -124,7 +124,7 @@ class AppColors {
   // Borders & dividers
   // ---------------------------------------------------------------------
 
-  static const Color borderSubtle = Color(0xFFF5F5F5);
+  static const Color borderSubtle = Color(0xFFF4F4F4);
   static const Color borderDefault = Color(0xFFD5D5D5);
   static const Color borderLight = Color(0xFFE6E6E6);
 

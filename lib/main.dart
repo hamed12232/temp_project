@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:temp_project/core/di/injection.dart';
 import 'package:temp_project/core/theme/app_theme.dart';
-import 'package:temp_project/features/stories/presentation/pages/stories_page.dart';
+import 'package:temp_project/features/request_status/presentation/pages/request_status_page.dart';
 
 import 'core/network/models/api_result.dart';
 import 'features/auth/domain/usecases/login_usecase.dart';
@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
            theme: AppTheme.light,
 
-        home: const StoriesPage(),
+        home: const RequestStatusPage(),
       ),
     );
   }
